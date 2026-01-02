@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bennett Program Ops Center</title>
+	<link rel="icon" href="https://raw.githubusercontent.com/qogmlwo000/gwj2pickpackhtp/main/Bennett.ico" type="image/x-icon">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0f172a;
+            color: #f1f5f9;
+        }
+        .card-hover {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .card-hover:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px -5px rgba(59, 130, 246, 0.3);
+            border-color: #3b82f6;
+        }
+        /* 웹 도구용 그라데이션 버튼 */
+        .btn-gradient {
+            background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
+            transition: all 0.2s ease;
+        }
+        .btn-gradient:hover {
+            opacity: 0.9;
+            transform: scale(1.02);
+        }
+        /* 크롬 확장프로그램용 버튼 */
+        .btn-store {
+            background-color: #374151;
+            border: 1px solid #4b5563;
+            transition: all 0.2s ease;
+        }
+        .btn-store:hover {
+            background-color: #4b5563;
+            transform: scale(1.02);
+        }
+        /* 배경 효과 */
+        .bg-glow {
+            position: absolute;
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, rgba(59,130,246,0.1) 0%, rgba(0,0,0,0) 70%);
+            border-radius: 50%;
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        /* 🌊 텍스트 물결 애니메이션 */
+        @keyframes gradient-flow {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .text-gradient-flow {
+            background: linear-gradient(
+                to right, 
+                #60a5fa, /* Blue */
+                #c084fc, /* Purple */
+                #f472b6, /* Pink */
+                #c084fc, /* Purple */
+                #60a5fa  /* Blue */
+            );
+            background-size: 300% auto;
+            color: transparent;
+            -webkit-background-clip: text;
+            background-clip: text;
+            animation: gradient-flow 5s linear infinite;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col items-center justify-center relative overflow-x-hidden">
+
+    <div class="bg-glow -top-20 -left-20"></div>
+    <div class="bg-glow bottom-0 right-0"></div>
+
+    <main class="container mx-auto px-4 py-12 max-w-7xl">
+        
+        <header class="text-center mb-12 space-y-4">
+            
+            <div class="relative inline-flex overflow-hidden rounded-full p-[1px] mb-2">
+                <span class="absolute inset-[-1000%] animate-[spin_2s_linear_infinite] bg-[conic-gradient(from_90deg_at_50%_50%,#1e293b_0%,#3b82f6_50%,#1e293b_100%)]"></span>
+                <span class="inline-flex h-full w-full cursor-default items-center justify-center rounded-full bg-gray-900 px-4 py-1 text-xs font-bold text-blue-300 backdrop-blur-3xl">
+                    Coupang Fulfillment Services GWJ2 Tools
+                </span>
+            </div>
+
+            <h1 class="text-4xl md:text-6xl font-extrabold tracking-tight">
+                <span class="text-gradient-flow">
+                    # Bennett Program
+                </span>
+            </h1>
+            <p class="text-gray-400 text-base md:text-lg max-w-2xl mx-auto">
+                CFS GWJ2 센터 운영 효율화를 위한 통합 솔루션 모음입니다.<br class="hidden md:block">
+                원하시는 프로그램을 선택하여 실행하세요.
+            </p>
+        </header>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
+
+            <a href="https://qogmlwo000.github.io/gwj2pickpackhtp/" target="_blank" class="card-hover block bg-gray-800 border border-gray-700 rounded-2xl p-5 relative group flex flex-col h-full">
+                <div class="absolute top-4 right-4 text-3xl opacity-10 group-hover:opacity-100 group-hover:scale-110 transition-all duration-300">📊</div>
+                <div class="w-10 h-10 rounded-lg bg-blue-500/20 flex items-center justify-center mb-4 text-xl">
+                    🚀
+                </div>
+                <h2 class="text-lg font-bold text-white mb-2">베넷 HTP TOOL</h2>
+                <p class="text-gray-400 text-sm mb-6 flex-grow">
+                    엑셀 파일을 업로드하여 실시간으로 HTP 데이터를 공유하고 분석하는 도구입니다.
+                </p>
+                <div class="btn-gradient w-full py-2.5 rounded-xl text-center font-bold text-sm text-white shadow-lg mt-auto">
+                    실행하기 &rarr;
+                </div>
+            </a>
+
+            <a href="https://qogmlwo000.github.io/bennettbarcode/" target="_blank" class="card-hover block bg-gray-800 border border-gray-700 rounded-2xl p-5 relative group flex flex-col h-full">
+                <div class="absolute top-4 right-4 text-3xl opacity-10 group-hover:opacity-100 group-hover:scale-110 transition-all duration-300">🖨️</div>
+                <div class="w-10 h-10 rounded-lg bg-green-500/20 flex items-center justify-center mb-4 text-xl">
+                    📏
+                </div>
+                <h2 class="text-lg font-bold text-white mb-2">베넷 바코드 생성기</h2>
+                <p class="text-gray-400 text-sm mb-6 flex-grow">
+                    필요한 로케이션, 상품 등의 바코드를 웹에서 즉시 생성하고 출력합니다.
+                </p>
+                <div class="btn-gradient w-full py-2.5 rounded-xl text-center font-bold text-sm text-white shadow-lg mt-auto">
+                    실행하기 &rarr;
+                </div>
+            </a>
+
+            <a href="https://chromewebstore.google.com/detail/gwj2-wms-extender/mmkdjhefdjcofgjliepephhjjicpiaib?hl=ko&utm_source=ext_sidebar" target="_blank" class="card-hover block bg-gray-800 border border-gray-700 rounded-2xl p-5 relative group flex flex-col h-full">
+                <div class="absolute top-4 right-4 text-3xl opacity-10 group-hover:opacity-100 group-hover:scale-110 transition-all duration-300">🧩</div>
+                <div class="w-10 h-10 rounded-lg bg-purple-500/20 flex items-center justify-center mb-4 text-xl">
+                    ⚡
+                </div>
+                <h2 class="text-lg font-bold text-white mb-2">GWJ2 WMS Extender</h2>
+                <p class="text-gray-400 text-sm mb-6 flex-grow">
+                    크롬 확장프로그램을 통해 WMS의 기능을 확장하고 편의성을 높입니다.
+                </p>
+                <div class="btn-store w-full py-2.5 rounded-xl text-center font-bold text-sm text-white shadow-lg mt-auto">
+                    스토어 방문 &rarr;
+                </div>
+            </a>
+
+            <a href="https://chromewebstore.google.com/detail/%EB%B2%A0%EB%84%B7-%ED%95%98%EC%9D%B4%EB%9D%BC%EC%9D%B4%ED%8A%B8-%EB%8B%A4%EC%A4%91-%ED%85%8D%EC%8A%A4%ED%8A%B8-%EA%B0%95%EC%A1%B0/gkpciglfeimfhkeoahldlemimbnocled?hl=ko&utm_source=ext_sidebar" target="_blank" class="card-hover block bg-gray-800 border border-gray-700 rounded-2xl p-5 relative group flex flex-col h-full">
+                <div class="absolute top-4 right-4 text-3xl opacity-10 group-hover:opacity-100 group-hover:scale-110 transition-all duration-300">✨</div>
+                <div class="w-10 h-10 rounded-lg bg-yellow-500/20 flex items-center justify-center mb-4 text-xl">
+                    🖍️
+                </div>
+                <h2 class="text-lg font-bold text-white mb-2">베넷 하이라이트</h2>
+                <p class="text-gray-400 text-sm mb-6 flex-grow">
+                    원하는 텍스트를 동시에 여러 개 하이라이트하여 업무 시인성을 높입니다.
+                </p>
+                <div class="btn-store w-full py-2.5 rounded-xl text-center font-bold text-sm text-white shadow-lg mt-auto">
+                    스토어 방문 &rarr;
+                </div>
+            </a>
+
+        </div>
+
+        <footer class="text-center mt-12 border-t border-gray-800 pt-8">
+            <p class="text-gray-500 text-xs md:text-sm">
+                &copy; 2026 Bennett Program. All rights reserved.<br>
+                Developed by Bennett
+            </p>
+        </footer>
+
+    </main>
+</body>
+</html>
