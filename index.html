@@ -13,33 +13,134 @@
             background-color: #0f172a;
             color: #f1f5f9;
         }
+        
+        /* 🎬 카드 등장 애니메이션 */
+        @keyframes cardEntrance {
+            0% {
+                opacity: 0;
+                transform: translate(-50%, -50%) scale(0.3) rotate(10deg);
+            }
+            60% {
+                transform: translate(-50%, -50%) scale(1.05) rotate(-2deg);
+            }
+            100% {
+                opacity: 1;
+                transform: translate(0, 0) scale(1) rotate(0deg);
+            }
+        }
+
+        .card-entrance {
+            animation: cardEntrance 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+            opacity: 0;
+        }
+
+        /* 각 카드별 딜레이 */
+        .card-entrance:nth-child(1) { animation-delay: 0.1s; }
+        .card-entrance:nth-child(2) { animation-delay: 0.2s; }
+        .card-entrance:nth-child(3) { animation-delay: 0.3s; }
+        .card-entrance:nth-child(4) { animation-delay: 0.4s; }
+        .card-entrance:nth-child(5) { animation-delay: 0.5s; }
+        .card-entrance:nth-child(6) { animation-delay: 0.6s; }
+
+        /* 🎯 카드 그룹 호버 효과 */
+        .cards-container {
+            position: relative;
+        }
+
         .card-hover {
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            z-index: 1;
         }
+
+        /* 다른 카드들 어둡게 */
+        .cards-container:has(.card-hover:hover) .card-hover:not(:hover) {
+            opacity: 0.3;
+            filter: blur(2px);
+            transform: scale(0.95);
+        }
+
+        /* 호버된 카드 강조 */
         .card-hover:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 25px -5px rgba(59, 130, 246, 0.3);
-            border-color: #3b82f6;
+            transform: translateY(-15px) scale(1.05);
+            z-index: 10;
+            box-shadow: 
+                0 0 60px rgba(59, 130, 246, 0.6),
+                0 0 100px rgba(139, 92, 246, 0.4),
+                0 20px 40px -10px rgba(0, 0, 0, 0.8);
+            border-color: #60a5fa;
         }
+
+        /* 호버 시 빛 효과 */
+        .card-hover::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(
+                circle at center,
+                rgba(59, 130, 246, 0.15),
+                transparent 70%
+            );
+            opacity: 0;
+            transition: opacity 0.4s ease;
+            pointer-events: none;
+            border-radius: 1rem;
+        }
+
+        .card-hover:hover::before {
+            opacity: 1;
+        }
+
+        /* 제목 스타일 - 통일감 있는 섀도우 효과 */
+        .card-title {
+            font-weight: 800;
+            font-size: 1.125rem;
+            color: #e2e8f0;
+            text-shadow: 
+                0 0 20px rgba(96, 165, 250, 0.3),
+                0 2px 4px rgba(0, 0, 0, 0.8);
+            transition: all 0.3s ease;
+            letter-spacing: -0.02em;
+        }
+
+        .card-hover:hover .card-title {
+            color: #ffffff;
+            text-shadow: 
+                0 0 30px rgba(96, 165, 250, 0.8),
+                0 0 50px rgba(139, 92, 246, 0.5),
+                0 4px 8px rgba(0, 0, 0, 0.9);
+            transform: translateY(-2px);
+        }
+
         /* 웹 도구용 그라데이션 버튼 */
         .btn-gradient {
             background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
-            transition: all 0.2s ease;
+            transition: all 0.3s ease;
         }
-        .btn-gradient:hover {
-            opacity: 0.9;
-            transform: scale(1.02);
+        
+        .card-hover:hover .btn-gradient {
+            background: linear-gradient(135deg, #60a5fa 0%, #a78bfa 100%);
+            box-shadow: 0 0 25px rgba(96, 165, 250, 0.6);
+            transform: scale(1.05);
         }
+
         /* 크롬 확장프로그램용 버튼 */
         .btn-store {
             background-color: #374151;
             border: 1px solid #4b5563;
-            transition: all 0.2s ease;
+            transition: all 0.3s ease;
         }
-        .btn-store:hover {
+        
+        .card-hover:hover .btn-store {
             background-color: #4b5563;
-            transform: scale(1.02);
+            border-color: #60a5fa;
+            box-shadow: 0 0 25px rgba(96, 165, 250, 0.4);
+            transform: scale(1.05);
         }
+
         /* 배경 효과 */
         .bg-glow {
             position: absolute;
@@ -51,7 +152,7 @@
             pointer-events: none;
         }
 
-        /* 🌊 텍스트 물결 애니메이션 */
+        /* 🌊 메인 타이틀 물결 애니메이션 */
         @keyframes gradient-flow {
             0% { background-position: 0% 50%; }
             50% { background-position: 100% 50%; }
@@ -61,17 +162,54 @@
         .text-gradient-flow {
             background: linear-gradient(
                 to right, 
-                #60a5fa, /* Blue */
-                #c084fc, /* Purple */
-                #f472b6, /* Pink */
-                #c084fc, /* Purple */
-                #60a5fa  /* Blue */
+                #60a5fa,
+                #c084fc,
+                #f472b6,
+                #c084fc,
+                #60a5fa
             );
             background-size: 300% auto;
             color: transparent;
             -webkit-background-clip: text;
             background-clip: text;
             animation: gradient-flow 5s linear infinite;
+        }
+
+        /* 💫 헤더 페이드인 */
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        header {
+            animation: fadeInDown 0.8s ease-out;
+        }
+
+        /* 아이콘 호버 효과 */
+        .icon-wrapper {
+            transition: all 0.3s ease;
+        }
+
+        .card-hover:hover .icon-wrapper {
+            transform: scale(1.2) rotate(10deg);
+            filter: drop-shadow(0 0 15px rgba(96, 165, 250, 0.8));
+        }
+
+        /* 배경 이모지 호버 효과 */
+        .bg-emoji {
+            transition: all 0.4s ease;
+        }
+
+        .card-hover:hover .bg-emoji {
+            opacity: 0.3 !important;
+            transform: scale(1.3) rotate(15deg);
+            filter: drop-shadow(0 0 20px rgba(96, 165, 250, 0.6));
         }
     </style>
 </head>
@@ -102,14 +240,14 @@
             </p>
         </header>
 
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div class="cards-container grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
 
-            <a href="https://qogmlwo000.github.io/gwj2pickpackhtp/" target="_blank" class="card-hover block bg-gray-800 border border-gray-700 rounded-2xl p-5 relative group flex flex-col h-full">
-                <div class="absolute top-4 right-4 text-3xl opacity-10 group-hover:opacity-100 group-hover:scale-110 transition-all duration-300">📊</div>
-                <div class="w-10 h-10 rounded-lg bg-blue-500/20 flex items-center justify-center mb-4 text-xl">
+            <a href="https://qogmlwo000.github.io/gwj2pickpackhtp/" target="_blank" class="card-entrance card-hover block bg-gray-800 border border-gray-700 rounded-2xl p-5 relative group flex flex-col h-full">
+                <div class="bg-emoji absolute top-4 right-4 text-3xl opacity-10">📊</div>
+                <div class="icon-wrapper w-10 h-10 rounded-lg bg-blue-500/20 flex items-center justify-center mb-4 text-xl">
                     🚀
                 </div>
-                <h2 class="text-lg font-bold text-white mb-2">Bennett HTP TOOL #마더</h2>
+                <h2 class="card-title mb-2">Bennett HTP TOOL #마더</h2>
                 <p class="text-gray-400 text-sm mb-6 flex-grow">
                     엑셀 파일을 업로드하여 실시간으로 HTP 데이터를 공유하고 분석하는 마더용 도구입니다.
                 </p>
@@ -118,12 +256,12 @@
                 </div>
             </a>
 			
-			<a href="https://qogmlwo000.github.io/gwj2pickpackhtpcfc/" target="_blank" class="card-hover block bg-gray-800 border border-gray-700 rounded-2xl p-5 relative group flex flex-col h-full">
-                <div class="absolute top-4 right-4 text-3xl opacity-10 group-hover:opacity-100 group-hover:scale-110 transition-all duration-300">📊</div>
-                <div class="w-10 h-10 rounded-lg bg-blue-500/20 flex items-center justify-center mb-4 text-xl">
+			<a href="https://qogmlwo000.github.io/gwj2pickpackhtpcfc/" target="_blank" class="card-entrance card-hover block bg-gray-800 border border-gray-700 rounded-2xl p-5 relative group flex flex-col h-full">
+                <div class="bg-emoji absolute top-4 right-4 text-3xl opacity-10">📊</div>
+                <div class="icon-wrapper w-10 h-10 rounded-lg bg-blue-500/20 flex items-center justify-center mb-4 text-xl">
                     🚀
                 </div>
-                <h2 class="text-lg font-bold text-white mb-2">Bennett HTP TOOL #CFC</h2>
+                <h2 class="card-title mb-2">Bennett HTP TOOL #CFC</h2>
                 <p class="text-gray-400 text-sm mb-6 flex-grow">
                     엑셀 파일을 업로드하여 실시간으로 HTP 데이터를 공유하고 분석하는 CFC용 도구입니다.
                 </p>
@@ -132,12 +270,12 @@
                 </div>
             </a>
 
-            <a href="https://qogmlwo000.github.io/gwj2workday/" target="_blank" class="card-hover block bg-gray-800 border border-gray-700 rounded-2xl p-5 relative group flex flex-col h-full">
-                <div class="absolute top-4 right-4 text-3xl opacity-10 group-hover:opacity-100 group-hover:scale-110 transition-all duration-300">⏰</div>
-                <div class="w-10 h-10 rounded-lg bg-indigo-500/20 flex items-center justify-center mb-4 text-xl">
+            <a href="https://qogmlwo000.github.io/gwj2workday/" target="_blank" class="card-entrance card-hover block bg-gray-800 border border-gray-700 rounded-2xl p-5 relative group flex flex-col h-full">
+                <div class="bg-emoji absolute top-4 right-4 text-3xl opacity-10">⏰</div>
+                <div class="icon-wrapper w-10 h-10 rounded-lg bg-indigo-500/20 flex items-center justify-center mb-4 text-xl">
                     📅
                 </div>
-                <h2 class="text-lg font-bold text-white mb-2">GWJ2 OB Workday</h2>
+                <h2 class="card-title mb-2">GWJ2 OB Workday</h2>
                 <p class="text-gray-400 text-sm mb-6 flex-grow">
                     OB 팀원들의 근무시간을 관리하고 연장/조출 신청을 효율적으로 처리합니다.
                 </p>
@@ -146,12 +284,12 @@
                 </div>
             </a>
 
-            <a href="https://qogmlwo000.github.io/bennettbarcode/" target="_blank" class="card-hover block bg-gray-800 border border-gray-700 rounded-2xl p-5 relative group flex flex-col h-full">
-                <div class="absolute top-4 right-4 text-3xl opacity-10 group-hover:opacity-100 group-hover:scale-110 transition-all duration-300">🖨️</div>
-                <div class="w-10 h-10 rounded-lg bg-green-500/20 flex items-center justify-center mb-4 text-xl">
+            <a href="https://qogmlwo000.github.io/bennettbarcode/" target="_blank" class="card-entrance card-hover block bg-gray-800 border border-gray-700 rounded-2xl p-5 relative group flex flex-col h-full">
+                <div class="bg-emoji absolute top-4 right-4 text-3xl opacity-10">🖨️</div>
+                <div class="icon-wrapper w-10 h-10 rounded-lg bg-green-500/20 flex items-center justify-center mb-4 text-xl">
                     📏
                 </div>
-                <h2 class="text-lg font-bold text-white mb-2">Bennett Barcode Generator</h2>
+                <h2 class="card-title mb-2">Bennett Barcode Generator</h2>
                 <p class="text-gray-400 text-sm mb-6 flex-grow">
                     필요한 로케이션, 상품 등의 바코드를 웹에서 즉시 생성하고 출력합니다.
                 </p>
@@ -160,12 +298,12 @@
                 </div>
             </a>
 
-            <a href="https://chromewebstore.google.com/detail/gwj2-wms-extender-2/olncnmfjhjbghcmgkoklfkhcedblkkop?authuser=3&hl=ko" target="_blank" class="card-hover block bg-gray-800 border border-gray-700 rounded-2xl p-5 relative group flex flex-col h-full">
-                <div class="absolute top-4 right-4 text-3xl opacity-10 group-hover:opacity-100 group-hover:scale-110 transition-all duration-300">🧩</div>
-                <div class="w-10 h-10 rounded-lg bg-purple-500/20 flex items-center justify-center mb-4 text-xl">
+            <a href="https://chromewebstore.google.com/detail/gwj2-wms-extender-2/olncnmfjhjbghcmgkoklfkhcedblkkop?authuser=3&hl=ko" target="_blank" class="card-entrance card-hover block bg-gray-800 border border-gray-700 rounded-2xl p-5 relative group flex flex-col h-full">
+                <div class="bg-emoji absolute top-4 right-4 text-3xl opacity-10">🧩</div>
+                <div class="icon-wrapper w-10 h-10 rounded-lg bg-purple-500/20 flex items-center justify-center mb-4 text-xl">
                     ⚡
                 </div>
-                <h2 class="text-lg font-bold text-white mb-2">GWJ2 WMS Extender 2</h2>
+                <h2 class="card-title mb-2">GWJ2 WMS Extender 2</h2>
                 <p class="text-gray-400 text-sm mb-6 flex-grow">
                     크롬 확장프로그램을 통해 WMS의 기능을 확장하고 편의성을 높입니다.
                 </p>
@@ -174,12 +312,12 @@
                 </div>
             </a>
 
-            <a href="https://chromewebstore.google.com/detail/%EB%B2%A0%EB%84%B7-%ED%95%98%EC%9D%B4%EB%9D%BC%EC%9D%B4%ED%8A%B8-%EB%8B%A4%EC%A4%91-%ED%85%8D%EC%8A%A4%ED%8A%B8-%EA%B0%95%EC%A1%B0/gkpciglfeimfhkeoahldlemimbnocled?hl=ko&utm_source=ext_sidebar" target="_blank" class="card-hover block bg-gray-800 border border-gray-700 rounded-2xl p-5 relative group flex flex-col h-full">
-                <div class="absolute top-4 right-4 text-3xl opacity-10 group-hover:opacity-100 group-hover:scale-110 transition-all duration-300">✨</div>
-                <div class="w-10 h-10 rounded-lg bg-yellow-500/20 flex items-center justify-center mb-4 text-xl">
+            <a href="https://chromewebstore.google.com/detail/%EB%B2%A0%EB%84%B7-%ED%95%98%EC%9D%B4%EB%9D%BC%EC%9D%B4%ED%8A%B8-%EB%8B%A4%EC%A4%91-%ED%85%8D%EC%8A%A4%ED%8A%B8-%EA%B0%95%EC%A1%B0/gkpciglfeimfhkeoahldlemimbnocled?hl=ko&utm_source=ext_sidebar" target="_blank" class="card-entrance card-hover block bg-gray-800 border border-gray-700 rounded-2xl p-5 relative group flex flex-col h-full">
+                <div class="bg-emoji absolute top-4 right-4 text-3xl opacity-10">✨</div>
+                <div class="icon-wrapper w-10 h-10 rounded-lg bg-yellow-500/20 flex items-center justify-center mb-4 text-xl">
                     🖍️
                 </div>
-                <h2 class="text-lg font-bold text-white mb-2">Bennett Highlighter</h2>
+                <h2 class="card-title mb-2">Bennett Highlighter</h2>
                 <p class="text-gray-400 text-sm mb-6 flex-grow">
                     원하는 텍스트를 동시에 여러 개 하이라이트하여 업무 시인성을 높입니다.
                 </p>
