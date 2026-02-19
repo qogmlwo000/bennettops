@@ -33,8 +33,6 @@
             --text-primary: #f1f5f9;
             --text-secondary: #94a3b8;
             --text-muted: #64748b;
-            --glow-blue: rgba(59, 130, 246, 0.15);
-            --glow-purple: rgba(139, 92, 246, 0.15);
         }
 
         body {
@@ -44,6 +42,17 @@
             overflow-x: hidden;
             -webkit-font-smoothing: antialiased;
             -moz-osx-font-smoothing: grayscale;
+        }
+
+        /* ═══════════════════════════════════════════
+           GPU ACCELERATION LAYER
+           모든 애니메이션 요소를 GPU 합성 레이어로 승격
+        ═══════════════════════════════════════════ */
+        .gpu-layer {
+            will-change: transform, opacity;
+            transform: translateZ(0);
+            backface-visibility: hidden;
+            -webkit-backface-visibility: hidden;
         }
 
         /* ═══════════════════════════════════════════
@@ -59,13 +68,17 @@
             justify-content: center;
             flex-direction: column;
             gap: 24px;
-            transition: opacity 0.6s ease, visibility 0.6s ease;
+            will-change: opacity;
+            transform: translateZ(0);
         }
 
-        .loading-screen.hidden {
-            opacity: 0;
-            visibility: hidden;
-            pointer-events: none;
+        .loading-screen.hiding {
+            animation: fadeOutScreen 0.8s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+        }
+
+        @keyframes fadeOutScreen {
+            0% { opacity: 1; }
+            100% { opacity: 0; visibility: hidden; pointer-events: none; }
         }
 
         .loading-logo {
@@ -77,6 +90,8 @@
             background-clip: text;
             color: transparent;
             animation: loadPulse 1.5s ease-in-out infinite;
+            will-change: opacity;
+            transform: translateZ(0);
         }
 
         .loading-bar-container {
@@ -92,13 +107,16 @@
             width: 0%;
             background: linear-gradient(90deg, #3b82f6, #8b5cf6, #ec4899);
             border-radius: 4px;
-            animation: loadProgress 1.2s ease-out forwards;
+            animation: loadProgress 1.2s cubic-bezier(0.23, 1, 0.32, 1) forwards;
+            will-change: transform;
+            transform-origin: left center;
+            transform: translateZ(0);
         }
 
         @keyframes loadProgress {
-            0% { width: 0%; }
-            50% { width: 70%; }
-            100% { width: 100%; }
+            0% { transform: scaleX(0) translateZ(0); }
+            50% { transform: scaleX(0.7) translateZ(0); }
+            100% { transform: scaleX(1) translateZ(0); width: 100%; }
         }
 
         @keyframes loadPulse {
@@ -108,6 +126,7 @@
 
         /* ═══════════════════════════════════════════
            AMBIENT BACKGROUND
+           GPU 합성 전용: transform + opacity만 사용
         ═══════════════════════════════════════════ */
         .ambient-bg {
             position: fixed;
@@ -115,14 +134,16 @@
             z-index: 0;
             overflow: hidden;
             pointer-events: none;
+            contain: strict;
         }
 
         .ambient-orb {
             position: absolute;
             border-radius: 50%;
             filter: blur(100px);
-            opacity: 0.4;
-            animation: orbFloat 20s ease-in-out infinite;
+            will-change: transform;
+            transform: translateZ(0);
+            contain: layout style paint;
         }
 
         .ambient-orb:nth-child(1) {
@@ -131,7 +152,7 @@
             background: radial-gradient(circle, rgba(59,130,246,0.12) 0%, transparent 70%);
             top: -15%;
             left: -10%;
-            animation-delay: 0s;
+            opacity: 0.4;
         }
 
         .ambient-orb:nth-child(2) {
@@ -140,7 +161,7 @@
             background: radial-gradient(circle, rgba(139,92,246,0.1) 0%, transparent 70%);
             bottom: -10%;
             right: -5%;
-            animation-delay: -7s;
+            opacity: 0.4;
         }
 
         .ambient-orb:nth-child(3) {
@@ -149,15 +170,7 @@
             background: radial-gradient(circle, rgba(6,182,212,0.08) 0%, transparent 70%);
             top: 50%;
             left: 50%;
-            transform: translate(-50%, -50%);
-            animation-delay: -14s;
-        }
-
-        @keyframes orbFloat {
-            0%, 100% { transform: translate(0, 0) scale(1); }
-            25% { transform: translate(30px, -20px) scale(1.05); }
-            50% { transform: translate(-20px, 15px) scale(0.95); }
-            75% { transform: translate(15px, 25px) scale(1.02); }
+            opacity: 0.4;
         }
 
         /* Noise texture overlay */
@@ -169,6 +182,7 @@
             pointer-events: none;
             background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
             background-repeat: repeat;
+            contain: strict;
         }
 
         /* Grid pattern */
@@ -183,22 +197,26 @@
             background-size: 60px 60px;
             mask-image: radial-gradient(ellipse 80% 60% at 50% 40%, black 30%, transparent 100%);
             -webkit-mask-image: radial-gradient(ellipse 80% 60% at 50% 40%, black 30%, transparent 100%);
+            contain: strict;
         }
 
         /* ═══════════════════════════════════════════
-           CURSOR GLOW
+           CURSOR GLOW - rAF 기반, GPU transform만
         ═══════════════════════════════════════════ */
         .cursor-glow {
             position: fixed;
+            top: 0;
+            left: 0;
             width: 500px;
             height: 500px;
             border-radius: 50%;
             pointer-events: none;
             z-index: 2;
-            background: radial-gradient(circle, rgba(59,130,246,0.06) 0%, transparent 70%);
-            transform: translate(-50%, -50%);
-            transition: opacity 0.3s ease;
+            background: radial-gradient(circle, rgba(59,130,246,0.07) 0%, transparent 70%);
+            will-change: transform;
+            transform: translate3d(-50%, -50%, 0);
             opacity: 0;
+            contain: layout style paint;
         }
 
         .cursor-glow.active {
@@ -209,20 +227,23 @@
            HEADER
         ═══════════════════════════════════════════ */
         .header-section {
+            will-change: transform, opacity;
+            transform: translate3d(0, 30px, 0);
             opacity: 0;
-            transform: translateY(30px);
-            animation: revealUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-            animation-delay: 1.3s;
+        }
+
+        .header-section.revealed {
+            animation: revealUp 0.9s cubic-bezier(0.16, 1, 0.3, 1) forwards;
         }
 
         @keyframes revealUp {
             to {
                 opacity: 1;
-                transform: translateY(0);
+                transform: translate3d(0, 0, 0);
             }
         }
 
-        /* Spinning badge */
+        /* Spinning badge - GPU transform rotation */
         .badge-wrapper {
             position: relative;
             display: inline-flex;
@@ -236,11 +257,13 @@
             position: absolute;
             inset: -200%;
             background: conic-gradient(from 0deg, transparent 0%, #3b82f6 25%, transparent 50%, #8b5cf6 75%, transparent 100%);
+            will-change: transform;
             animation: spinBorder 3s linear infinite;
+            transform: translateZ(0);
         }
 
         @keyframes spinBorder {
-            to { transform: rotate(360deg); }
+            to { transform: rotate(360deg) translateZ(0); }
         }
 
         .badge-inner {
@@ -266,15 +289,17 @@
             border-radius: 50%;
             background: #22c55e;
             box-shadow: 0 0 8px rgba(34, 197, 94, 0.6);
+            will-change: transform, opacity;
             animation: dotPulse 2s ease-in-out infinite;
+            transform: translateZ(0);
         }
 
         @keyframes dotPulse {
-            0%, 100% { opacity: 1; transform: scale(1); }
-            50% { opacity: 0.5; transform: scale(0.8); }
+            0%, 100% { opacity: 1; transform: scale(1) translateZ(0); }
+            50% { opacity: 0.5; transform: scale(0.8) translateZ(0); }
         }
 
-        /* Main title */
+        /* Main title - GPU background-position animation */
         .main-title {
             font-size: clamp(2.5rem, 6vw, 4.5rem);
             font-weight: 900;
@@ -286,6 +311,7 @@
             background-clip: text;
             color: transparent;
             animation: shimmer 6s linear infinite;
+            transform: translateZ(0);
         }
 
         @keyframes shimmer {
@@ -302,7 +328,6 @@
             font-weight: 400;
         }
 
-        /* Decorative line */
         .header-line {
             width: 60px;
             height: 3px;
@@ -310,8 +335,12 @@
             border-radius: 4px;
             margin: 0 auto;
             opacity: 0;
-            animation: revealUp 0.6s ease forwards;
-            animation-delay: 1.6s;
+            will-change: transform, opacity;
+            transform: translate3d(0, 20px, 0);
+        }
+
+        .header-line.revealed {
+            animation: revealUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
         }
 
         /* ═══════════════════════════════════════════
@@ -327,8 +356,12 @@
             text-transform: uppercase;
             color: var(--text-muted);
             opacity: 0;
-            transform: translateY(20px);
-            animation: revealUp 0.6s ease forwards;
+            will-change: transform, opacity;
+            transform: translate3d(0, 20px, 0);
+        }
+
+        .category-label.revealed {
+            animation: revealUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
         }
 
         .category-label::before {
@@ -340,7 +373,9 @@
         }
 
         /* ═══════════════════════════════════════════
-           CARDS - GLASSMORPHISM
+           CARDS - 144fps GLASSMORPHISM
+           핵심: transform과 opacity만으로 모든 호버 처리
+           box-shadow/filter는 ::before/::after 레이어로 분리
         ═══════════════════════════════════════════ */
         .cards-container {
             position: relative;
@@ -358,40 +393,53 @@
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
             overflow: hidden;
-            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-            opacity: 0;
-            transform: translateY(40px);
             text-decoration: none;
             color: inherit;
+            will-change: transform;
+            transform: translate3d(0, 0, 0);
+            contain: layout style;
+        }
+
+        /* 카드 등장 - opacity + transform만 */
+        .glass-card {
+            opacity: 0;
+            transform: translate3d(0, 40px, 0);
+            transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1),
+                        opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
         .glass-card.visible {
             opacity: 1;
-            transform: translateY(0);
+            transform: translate3d(0, 0, 0);
         }
 
-        /* Card inner glow on hover */
+        /* 호버 시 Y축 이동 - GPU transform만 */
+        .glass-card.visible:hover {
+            transform: translate3d(0, -10px, 0);
+        }
+
+        /* 카드 글로우 쉐도우 - 별도 레이어로 분리하여 리페인트 방지 */
         .glass-card::before {
             content: '';
             position: absolute;
-            inset: 0;
+            inset: -1px;
             border-radius: 20px;
-            background: radial-gradient(
-                600px circle at var(--mouse-x, 50%) var(--mouse-y, 50%),
-                rgba(59, 130, 246, 0.06),
-                transparent 40%
-            );
             opacity: 0;
-            transition: opacity 0.4s ease;
+            transition: opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1);
             pointer-events: none;
-            z-index: 1;
+            z-index: -1;
+            will-change: opacity;
+            transform: translateZ(0);
+            box-shadow:
+                0 25px 50px -12px rgba(0, 0, 0, 0.5),
+                0 0 80px -20px rgba(59, 130, 246, 0.2);
         }
 
         .glass-card:hover::before {
             opacity: 1;
         }
 
-        /* Card border glow */
+        /* 카드 보더 그라데이션 글로우 - 별도 레이어 */
         .glass-card::after {
             content: '';
             position: absolute;
@@ -401,7 +449,7 @@
             background: linear-gradient(
                 135deg,
                 rgba(59, 130, 246, 0) 0%,
-                rgba(59, 130, 246, 0.2) 50%,
+                rgba(59, 130, 246, 0.25) 50%,
                 rgba(139, 92, 246, 0) 100%
             );
             -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
@@ -409,28 +457,62 @@
             -webkit-mask-composite: xor;
             mask-composite: exclude;
             opacity: 0;
-            transition: opacity 0.5s ease;
+            transition: opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1);
             pointer-events: none;
+            will-change: opacity;
+            transform: translateZ(0);
         }
 
         .glass-card:hover::after {
             opacity: 1;
         }
 
-        /* Card hover state */
-        .glass-card:hover {
-            background: var(--bg-card-hover);
-            border-color: var(--border-card-hover);
-            transform: translateY(-8px);
-            box-shadow:
-                0 25px 50px -12px rgba(0, 0, 0, 0.5),
-                0 0 80px -20px rgba(59, 130, 246, 0.15);
+        /* 마우스 추적 내부 글로우 - JS로 GPU transform 적용 */
+        .card-inner-glow {
+            position: absolute;
+            inset: 0;
+            border-radius: 20px;
+            pointer-events: none;
+            z-index: 1;
+            opacity: 0;
+            transition: opacity 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+            will-change: transform, opacity;
+            transform: translateZ(0);
+            background: radial-gradient(
+                350px circle at 50% 50%,
+                rgba(59, 130, 246, 0.08),
+                transparent 60%
+            );
         }
 
-        /* Sibling dim effect */
+        .glass-card:hover .card-inner-glow {
+            opacity: 1;
+        }
+
+        /* 배경 전환 - opacity만으로 처리 */
+        .card-bg-fill {
+            position: absolute;
+            inset: 0;
+            border-radius: 20px;
+            background: var(--bg-card-hover);
+            border: 1px solid var(--border-card-hover);
+            opacity: 0;
+            transition: opacity 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+            pointer-events: none;
+            z-index: -2;
+            will-change: opacity;
+            transform: translateZ(0);
+        }
+
+        .glass-card:hover .card-bg-fill {
+            opacity: 1;
+        }
+
+        /* 형제 카드 디밍 - opacity + filter 최소화 */
         .cards-container:has(.glass-card:hover) .glass-card:not(:hover) {
-            opacity: 0.45;
-            filter: blur(1px);
+            opacity: 0.4;
+            transition: opacity 0.35s cubic-bezier(0.4, 0, 0.2, 1),
+                        transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
         /* Icon badge */
@@ -444,11 +526,13 @@
             font-size: 1.25rem;
             position: relative;
             z-index: 2;
-            transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+            will-change: transform;
+            transform: translate3d(0, 0, 0);
+            transition: transform 0.45s cubic-bezier(0.34, 1.56, 0.64, 1);
         }
 
         .glass-card:hover .icon-badge {
-            transform: scale(1.1) translateY(-2px);
+            transform: translate3d(0, -2px, 0) scale(1.1);
         }
 
         /* Card type indicator */
@@ -503,7 +587,7 @@
             z-index: 2;
         }
 
-        /* Card action button */
+        /* Card action button - transform + opacity만 */
         .card-action {
             display: flex;
             align-items: center;
@@ -517,8 +601,9 @@
             letter-spacing: 0.01em;
             position: relative;
             z-index: 2;
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
             overflow: hidden;
+            will-change: transform;
+            transform: translateZ(0);
         }
 
         .card-action.primary {
@@ -527,11 +612,42 @@
             border: 1px solid rgba(59, 130, 246, 0.2);
         }
 
-        .glass-card:hover .card-action.primary {
+        /* 버튼 호버 오버레이 - opacity만으로 전환 */
+        .card-action.primary .btn-hover-fill {
+            position: absolute;
+            inset: 0;
             background: linear-gradient(135deg, #3b82f6 0%, #7c3aed 100%);
+            opacity: 0;
+            transition: opacity 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+            border-radius: 14px;
+            will-change: opacity;
+            transform: translateZ(0);
+        }
+
+        .glass-card:hover .card-action.primary .btn-hover-fill {
+            opacity: 1;
+        }
+
+        .glass-card:hover .card-action.primary {
             color: #ffffff;
             border-color: transparent;
-            box-shadow: 0 8px 25px -5px rgba(59, 130, 246, 0.4);
+        }
+
+        /* 버튼 글로우 쉐도우 - 별도 레이어 */
+        .card-action.primary .btn-glow {
+            position: absolute;
+            inset: -10px;
+            opacity: 0;
+            transition: opacity 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 8px 30px -5px rgba(59, 130, 246, 0.5);
+            border-radius: 20px;
+            pointer-events: none;
+            will-change: opacity;
+            transform: translateZ(0);
+        }
+
+        .glass-card:hover .card-action.primary .btn-glow {
+            opacity: 1;
         }
 
         .card-action.secondary {
@@ -540,19 +656,44 @@
             border: 1px solid rgba(255, 255, 255, 0.06);
         }
 
-        .glass-card:hover .card-action.secondary {
+        .card-action.secondary .btn-hover-fill {
+            position: absolute;
+            inset: 0;
             background: rgba(255, 255, 255, 0.08);
+            opacity: 0;
+            transition: opacity 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+            border-radius: 14px;
+            will-change: opacity;
+            transform: translateZ(0);
+        }
+
+        .glass-card:hover .card-action.secondary .btn-hover-fill {
+            opacity: 1;
+        }
+
+        .glass-card:hover .card-action.secondary {
             color: #e2e8f0;
             border-color: rgba(255, 255, 255, 0.12);
         }
 
+        .card-action .btn-text {
+            position: relative;
+            z-index: 1;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
         .card-action .arrow {
-            transition: transform 0.3s ease;
+            display: inline-block;
+            will-change: transform;
+            transform: translate3d(0, 0, 0);
+            transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
             font-size: 0.9em;
         }
 
         .glass-card:hover .card-action .arrow {
-            transform: translateX(4px);
+            transform: translate3d(5px, 0, 0);
         }
 
         /* Background icon */
@@ -562,14 +703,17 @@
             right: 16px;
             font-size: 2.5rem;
             opacity: 0.04;
-            transition: all 0.5s ease;
             z-index: 0;
             pointer-events: none;
+            will-change: transform, opacity;
+            transform: translate3d(0, 0, 0);
+            transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1),
+                        opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
         .glass-card:hover .card-bg-icon {
             opacity: 0.08;
-            transform: scale(1.15) rotate(8deg);
+            transform: translate3d(0, 0, 0) scale(1.15) rotate(8deg);
         }
 
         /* ═══════════════════════════════════════════
@@ -580,8 +724,12 @@
             padding-top: 32px;
             text-align: center;
             opacity: 0;
-            animation: revealUp 0.6s ease forwards;
-            animation-delay: 2.2s;
+            will-change: transform, opacity;
+            transform: translate3d(0, 20px, 0);
+        }
+
+        .site-footer.revealed {
+            animation: revealUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
         }
 
         .footer-text {
@@ -609,48 +757,35 @@
 
             .cards-container:has(.glass-card:hover) .glass-card:not(:hover) {
                 opacity: 1;
-                filter: none;
             }
 
-            .glass-card:hover {
-                transform: translateY(-4px);
+            .glass-card.visible:hover {
+                transform: translate3d(0, -4px, 0);
+            }
+        }
+
+        /* 저사양 기기 / 배터리 절약 모드 감지 */
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                animation-duration: 0.01ms !important;
+                transition-duration: 0.01ms !important;
             }
         }
 
         /* ═══════════════════════════════════════════
            SCROLLBAR
         ═══════════════════════════════════════════ */
-        ::-webkit-scrollbar {
-            width: 6px;
-        }
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 3px; }
+        ::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.2); }
 
-        ::-webkit-scrollbar-track {
-            background: transparent;
-        }
-
-        ::-webkit-scrollbar-thumb {
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 3px;
-        }
-
-        ::-webkit-scrollbar-thumb:hover {
-            background: rgba(255, 255, 255, 0.2);
-        }
-
-        /* ═══════════════════════════════════════════
-           SELECTION
-        ═══════════════════════════════════════════ */
         ::selection {
             background: rgba(59, 130, 246, 0.3);
             color: #ffffff;
         }
 
-        /* ═══════════════════════════════════════════
-           SMOOTH SCROLL
-        ═══════════════════════════════════════════ */
-        html {
-            scroll-behavior: smooth;
-        }
+        html { scroll-behavior: smooth; }
     </style>
 </head>
 <body class="min-h-screen relative">
@@ -664,7 +799,7 @@
     </div>
 
     <!-- Ambient Background -->
-    <div class="ambient-bg">
+    <div class="ambient-bg" id="ambientBg">
         <div class="ambient-orb"></div>
         <div class="ambient-orb"></div>
         <div class="ambient-orb"></div>
@@ -679,152 +814,146 @@
     <main class="relative z-10 mx-auto px-5 sm:px-6 py-16 md:py-24 max-w-6xl">
 
         <!-- Header -->
-        <header class="header-section text-center mb-16 md:mb-20 space-y-6">
+        <header class="header-section" id="headerSection">
+            <div class="text-center mb-16 md:mb-20 space-y-6">
 
-            <div class="badge-wrapper mb-3">
-                <span class="badge-inner">
-                    <span class="badge-dot"></span>
-                    CFS GWJ2 Operations Center
-                </span>
+                <div class="badge-wrapper mb-3">
+                    <span class="badge-inner">
+                        <span class="badge-dot"></span>
+                        CFS GWJ2 Operations Center
+                    </span>
+                </div>
+
+                <h1 class="main-title">
+                    Bennett Program
+                </h1>
+
+                <p class="subtitle">
+                    GWJ2 센터 운영 효율화를 위한<br>프리미엄 통합 솔루션 허브
+                </p>
+
+                <div class="header-line" id="headerLine"></div>
             </div>
-
-            <h1 class="main-title">
-                Bennett Program
-            </h1>
-
-            <p class="subtitle">
-                GWJ2 센터 운영 효율화를 위한<br>프리미엄 통합 솔루션 허브
-            </p>
-
-            <div class="header-line"></div>
         </header>
 
         <!-- Web Tools Section -->
         <div class="mb-6">
-            <span class="category-label" style="animation-delay: 1.7s;">Web Applications</span>
+            <span class="category-label" id="catWeb">Web Applications</span>
         </div>
 
         <div class="cards-container grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5 mb-14">
 
-            <!-- Card 1: HTP TOOL #마더 -->
             <a href="https://qogmlwo000.github.io/gwj2pickpackhtp/" target="_blank" class="glass-card" data-delay="0">
+                <div class="card-bg-fill"></div>
+                <div class="card-inner-glow"></div>
                 <div class="card-bg-icon">📊</div>
                 <div class="flex items-center gap-3 mb-4">
-                    <div class="icon-badge" style="background: rgba(59, 130, 246, 0.12);">
-                        🚀
-                    </div>
+                    <div class="icon-badge" style="background: rgba(59, 130, 246, 0.12);">🚀</div>
                     <span class="card-type web">Web Tool</span>
                 </div>
                 <h2 class="card-title mb-2">Bennett HTP #마더</h2>
-                <p class="card-desc mb-5 flex-grow">
-                    실시간 HTP 데이터 공유 및 분석을 위한 마더 전용 도구
-                </p>
+                <p class="card-desc mb-5 flex-grow">실시간 HTP 데이터 공유 및 분석을 위한 마더 전용 도구</p>
                 <div class="card-action primary mt-auto">
-                    실행하기 <span class="arrow">&rarr;</span>
+                    <div class="btn-hover-fill"></div>
+                    <div class="btn-glow"></div>
+                    <span class="btn-text">실행하기 <span class="arrow">&rarr;</span></span>
                 </div>
             </a>
 
-            <!-- Card 2: HTP TOOL #CFC -->
             <a href="https://qogmlwo000.github.io/gwj2pickpackhtpcfc/" target="_blank" class="glass-card" data-delay="1">
+                <div class="card-bg-fill"></div>
+                <div class="card-inner-glow"></div>
                 <div class="card-bg-icon">📊</div>
                 <div class="flex items-center gap-3 mb-4">
-                    <div class="icon-badge" style="background: rgba(6, 182, 212, 0.12);">
-                        🚀
-                    </div>
+                    <div class="icon-badge" style="background: rgba(6, 182, 212, 0.12);">🚀</div>
                     <span class="card-type web">Web Tool</span>
                 </div>
                 <h2 class="card-title mb-2">Bennett HTP #CFC</h2>
-                <p class="card-desc mb-5 flex-grow">
-                    실시간 HTP 데이터 공유 및 분석을 위한 CFC 전용 도구
-                </p>
+                <p class="card-desc mb-5 flex-grow">실시간 HTP 데이터 공유 및 분석을 위한 CFC 전용 도구</p>
                 <div class="card-action primary mt-auto">
-                    실행하기 <span class="arrow">&rarr;</span>
+                    <div class="btn-hover-fill"></div>
+                    <div class="btn-glow"></div>
+                    <span class="btn-text">실행하기 <span class="arrow">&rarr;</span></span>
                 </div>
             </a>
 
-            <!-- Card 3: OB Workday -->
             <a href="https://qogmlwo000.github.io/gwj2workday/" target="_blank" class="glass-card" data-delay="2">
+                <div class="card-bg-fill"></div>
+                <div class="card-inner-glow"></div>
                 <div class="card-bg-icon">⏰</div>
                 <div class="flex items-center gap-3 mb-4">
-                    <div class="icon-badge" style="background: rgba(99, 102, 241, 0.12);">
-                        📅
-                    </div>
+                    <div class="icon-badge" style="background: rgba(99, 102, 241, 0.12);">📅</div>
                     <span class="card-type web">Web Tool</span>
                 </div>
                 <h2 class="card-title mb-2">OB Workday</h2>
-                <p class="card-desc mb-5 flex-grow">
-                    OB 팀 근무시간 관리 및 연장 · 조출 신청 시스템
-                </p>
+                <p class="card-desc mb-5 flex-grow">OB 팀 근무시간 관리 및 연장 · 조출 신청 시스템</p>
                 <div class="card-action primary mt-auto">
-                    실행하기 <span class="arrow">&rarr;</span>
+                    <div class="btn-hover-fill"></div>
+                    <div class="btn-glow"></div>
+                    <span class="btn-text">실행하기 <span class="arrow">&rarr;</span></span>
                 </div>
             </a>
 
-            <!-- Card 4: Barcode Generator -->
             <a href="https://qogmlwo000.github.io/bennettbarcode/" target="_blank" class="glass-card" data-delay="3">
+                <div class="card-bg-fill"></div>
+                <div class="card-inner-glow"></div>
                 <div class="card-bg-icon">🖨️</div>
                 <div class="flex items-center gap-3 mb-4">
-                    <div class="icon-badge" style="background: rgba(34, 197, 94, 0.12);">
-                        📏
-                    </div>
+                    <div class="icon-badge" style="background: rgba(34, 197, 94, 0.12);">📏</div>
                     <span class="card-type web">Web Tool</span>
                 </div>
                 <h2 class="card-title mb-2">Barcode Generator</h2>
-                <p class="card-desc mb-5 flex-grow">
-                    로케이션 · 상품 바코드 즉시 생성 및 출력
-                </p>
+                <p class="card-desc mb-5 flex-grow">로케이션 · 상품 바코드 즉시 생성 및 출력</p>
                 <div class="card-action primary mt-auto">
-                    실행하기 <span class="arrow">&rarr;</span>
+                    <div class="btn-hover-fill"></div>
+                    <div class="btn-glow"></div>
+                    <span class="btn-text">실행하기 <span class="arrow">&rarr;</span></span>
                 </div>
             </a>
         </div>
 
         <!-- Chrome Extensions Section -->
         <div class="mb-6">
-            <span class="category-label" style="animation-delay: 1.9s;">Chrome Extensions</span>
+            <span class="category-label" id="catExt">Chrome Extensions</span>
         </div>
 
         <div class="cards-container grid grid-cols-1 md:grid-cols-2 gap-5 mb-16">
 
-            <!-- Card 5: WMS Extender -->
             <a href="https://chromewebstore.google.com/detail/gwj2-wms-extender-2/olncnmfjhjbghcmgkoklfkhcedblkkop?authuser=3&hl=ko" target="_blank" class="glass-card" data-delay="4">
+                <div class="card-bg-fill"></div>
+                <div class="card-inner-glow"></div>
                 <div class="card-bg-icon">🧩</div>
                 <div class="flex items-center gap-3 mb-4">
-                    <div class="icon-badge" style="background: rgba(139, 92, 246, 0.12);">
-                        ⚡
-                    </div>
+                    <div class="icon-badge" style="background: rgba(139, 92, 246, 0.12);">⚡</div>
                     <span class="card-type extension">Extension</span>
                 </div>
                 <h2 class="card-title mb-2">WMS Extender 2</h2>
-                <p class="card-desc mb-5 flex-grow">
-                    WMS 기능 확장 및 업무 편의성 강화를 위한 크롬 확장프로그램
-                </p>
+                <p class="card-desc mb-5 flex-grow">WMS 기능 확장 및 업무 편의성 강화를 위한 크롬 확장프로그램</p>
                 <div class="card-action secondary mt-auto">
-                    Chrome 웹스토어 <span class="arrow">&rarr;</span>
+                    <div class="btn-hover-fill"></div>
+                    <span class="btn-text">Chrome 웹스토어 <span class="arrow">&rarr;</span></span>
                 </div>
             </a>
 
-            <!-- Card 6: Highlighter -->
             <a href="https://chromewebstore.google.com/detail/%EB%B2%A0%EB%84%B7-%ED%95%98%EC%9D%B4%EB%9D%BC%EC%9D%B4%ED%8A%B8-%EB%8B%A4%EC%A4%91-%ED%85%8D%EC%8A%A4%ED%8A%B8-%EA%B0%95%EC%A1%B0/gkpciglfeimfhkeoahldlemimbnocled?hl=ko&utm_source=ext_sidebar" target="_blank" class="glass-card" data-delay="5">
+                <div class="card-bg-fill"></div>
+                <div class="card-inner-glow"></div>
                 <div class="card-bg-icon">✨</div>
                 <div class="flex items-center gap-3 mb-4">
-                    <div class="icon-badge" style="background: rgba(234, 179, 8, 0.12);">
-                        🖍️
-                    </div>
+                    <div class="icon-badge" style="background: rgba(234, 179, 8, 0.12);">🖍️</div>
                     <span class="card-type extension">Extension</span>
                 </div>
                 <h2 class="card-title mb-2">Bennett Highlighter</h2>
-                <p class="card-desc mb-5 flex-grow">
-                    다중 텍스트 동시 하이라이트로 업무 시인성 극대화
-                </p>
+                <p class="card-desc mb-5 flex-grow">다중 텍스트 동시 하이라이트로 업무 시인성 극대화</p>
                 <div class="card-action secondary mt-auto">
-                    Chrome 웹스토어 <span class="arrow">&rarr;</span>
+                    <div class="btn-hover-fill"></div>
+                    <span class="btn-text">Chrome 웹스토어 <span class="arrow">&rarr;</span></span>
                 </div>
             </a>
         </div>
 
         <!-- Footer -->
-        <footer class="site-footer mt-8">
+        <footer class="site-footer mt-8" id="siteFooter">
             <p class="footer-text">
                 &copy; 2026 <span class="footer-brand">Bennett Program</span>. All rights reserved.<br>
                 Crafted with precision by Bennett
@@ -834,69 +963,161 @@
     </main>
 
     <script>
-        // ─── Loading Screen ───
-        window.addEventListener('load', () => {
-            setTimeout(() => {
-                document.getElementById('loadingScreen').classList.add('hidden');
-            }, 1400);
+    (() => {
+        'use strict';
+
+        // ═══════════════════════════════════════════
+        // 144fps 핵심 엔진
+        // 모든 애니메이션을 단일 rAF 루프에서 처리
+        // ═══════════════════════════════════════════
+
+        // ─── 상태 ───
+        let mouseX = -500, mouseY = -500;
+        let glowX = -500, glowY = -500;
+        let orbPhases = [0, 2.4, 4.7]; // 각 orb의 위상
+        let isMouseActive = false;
+        let lastTime = 0;
+
+        const cursorGlow = document.getElementById('cursorGlow');
+        const orbs = document.querySelectorAll('.ambient-orb');
+        const cards = document.querySelectorAll('.glass-card');
+        const innerGlows = document.querySelectorAll('.card-inner-glow');
+
+        // 카드별 마우스 추적 상태
+        const cardStates = new Map();
+        cards.forEach((card, i) => {
+            cardStates.set(card, {
+                glowTargetX: 50, glowTargetY: 50,
+                glowCurrentX: 50, glowCurrentY: 50,
+                isHovered: false
+            });
         });
 
-        // ─── Cursor Glow ───
-        const cursorGlow = document.getElementById('cursorGlow');
-        let mouseX = 0, mouseY = 0;
-        let glowX = 0, glowY = 0;
-
+        // ─── 이벤트 리스너 (패시브) ───
         document.addEventListener('mousemove', (e) => {
             mouseX = e.clientX;
             mouseY = e.clientY;
-            cursorGlow.classList.add('active');
-        });
+            if (!isMouseActive) {
+                isMouseActive = true;
+                cursorGlow.classList.add('active');
+            }
+        }, { passive: true });
 
         document.addEventListener('mouseleave', () => {
+            isMouseActive = false;
             cursorGlow.classList.remove('active');
-        });
+        }, { passive: true });
 
-        function animateGlow() {
-            glowX += (mouseX - glowX) * 0.08;
-            glowY += (mouseY - glowY) * 0.08;
-            cursorGlow.style.left = glowX + 'px';
-            cursorGlow.style.top = glowY + 'px';
-            requestAnimationFrame(animateGlow);
-        }
-        animateGlow();
+        // 카드별 마우스 이벤트 - 좌표만 저장, DOM 조작 없음
+        cards.forEach(card => {
+            card.addEventListener('mouseenter', () => {
+                const state = cardStates.get(card);
+                if (state) state.isHovered = true;
+            }, { passive: true });
 
-        // ─── Card Mouse Tracking (for inner glow) ───
-        document.querySelectorAll('.glass-card').forEach(card => {
             card.addEventListener('mousemove', (e) => {
+                const state = cardStates.get(card);
+                if (!state) return;
                 const rect = card.getBoundingClientRect();
-                const x = ((e.clientX - rect.left) / rect.width) * 100;
-                const y = ((e.clientY - rect.top) / rect.height) * 100;
-                card.style.setProperty('--mouse-x', x + '%');
-                card.style.setProperty('--mouse-y', y + '%');
-            });
+                state.glowTargetX = ((e.clientX - rect.left) / rect.width) * 100;
+                state.glowTargetY = ((e.clientY - rect.top) / rect.height) * 100;
+            }, { passive: true });
+
+            card.addEventListener('mouseleave', () => {
+                const state = cardStates.get(card);
+                if (state) state.isHovered = false;
+            }, { passive: true });
         });
 
-        // ─── Scroll Reveal Cards ───
-        const observerOptions = {
-            threshold: 0.1,
-            rootMargin: '0px 0px -50px 0px'
-        };
+        // ─── 단일 rAF 루프 (모든 애니메이션 통합) ───
+        function tick(timestamp) {
+            // deltaTime 계산 (초 단위)
+            const dt = lastTime ? Math.min((timestamp - lastTime) / 1000, 0.05) : 0.016;
+            lastTime = timestamp;
 
+            // 보간 계수 (60fps 기준 0.08 → 프레임 독립적으로 변환)
+            // lerp factor = 1 - (1 - base)^(dt * 60)
+            const lerpFactor = 1 - Math.pow(0.88, dt * 60);
+
+            // 1) 커서 글로우 - GPU transform으로 이동
+            glowX += (mouseX - glowX) * lerpFactor;
+            glowY += (mouseY - glowY) * lerpFactor;
+            cursorGlow.style.transform = `translate3d(${glowX - 250}px, ${glowY - 250}px, 0)`;
+
+            // 2) 앰비언트 오브 - 순수 수학 기반 부유
+            const time = timestamp * 0.001;
+            for (let i = 0; i < orbs.length; i++) {
+                const phase = orbPhases[i];
+                const tx = Math.sin(time * 0.3 + phase) * 25;
+                const ty = Math.cos(time * 0.2 + phase * 1.3) * 18;
+                const s = 1 + Math.sin(time * 0.15 + phase * 0.7) * 0.03;
+                orbs[i].style.transform = `translate3d(${tx}px, ${ty}px, 0) scale(${s})`;
+            }
+
+            // 3) 카드 내부 글로우 - 부드러운 위치 보간
+            let idx = 0;
+            cardStates.forEach((state, card) => {
+                if (state.isHovered) {
+                    state.glowCurrentX += (state.glowTargetX - state.glowCurrentX) * lerpFactor;
+                    state.glowCurrentY += (state.glowTargetY - state.glowCurrentY) * lerpFactor;
+                    const glow = innerGlows[idx];
+                    if (glow) {
+                        glow.style.transform = `translate3d(${state.glowCurrentX - 50}%, ${state.glowCurrentY - 50}%, 0)`;
+                    }
+                }
+                idx++;
+            });
+
+            requestAnimationFrame(tick);
+        }
+
+        requestAnimationFrame(tick);
+
+        // ─── 로딩 화면 ───
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                const ls = document.getElementById('loadingScreen');
+                ls.classList.add('hiding');
+                ls.addEventListener('animationend', () => {
+                    ls.style.display = 'none';
+                }, { once: true });
+
+                // 순차적 등장 시퀀스
+                setTimeout(() => {
+                    document.getElementById('headerSection').classList.add('revealed');
+                }, 100);
+                setTimeout(() => {
+                    document.getElementById('headerLine').classList.add('revealed');
+                }, 400);
+                setTimeout(() => {
+                    document.getElementById('catWeb').classList.add('revealed');
+                }, 500);
+                setTimeout(() => {
+                    document.getElementById('catExt').classList.add('revealed');
+                }, 700);
+                setTimeout(() => {
+                    document.getElementById('siteFooter').classList.add('revealed');
+                }, 900);
+
+            }, 1300);
+        });
+
+        // ─── 카드 스크롤 등장 (IntersectionObserver) ───
         const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
+            for (const entry of entries) {
                 if (entry.isIntersecting) {
-                    const delay = entry.target.dataset.delay || 0;
+                    const delay = (entry.target.dataset.delay || 0) * 80 + 80;
                     setTimeout(() => {
                         entry.target.classList.add('visible');
-                    }, delay * 100 + 100);
+                    }, delay);
                     observer.unobserve(entry.target);
                 }
-            });
-        }, observerOptions);
+            }
+        }, { threshold: 0.08, rootMargin: '0px 0px -30px 0px' });
 
-        document.querySelectorAll('.glass-card').forEach(card => {
-            observer.observe(card);
-        });
+        cards.forEach(card => observer.observe(card));
+
+    })();
     </script>
 </body>
 </html>
