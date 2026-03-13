@@ -8,21 +8,20 @@
   <!-- Basic SEO -->
   <meta name="description" content="GWJ2 센터 운영 효율화를 위한 프리미엄 통합 솔루션 허브" />
   <meta name="theme-color" content="#030305" />
-  <meta name="color-scheme" content="dark" />
+  <meta name="color-scheme" content="dark light" />
 
   <link rel="icon" href="https://raw.githubusercontent.com/qogmlwo000/gwjpickpackhtp/main/Bennett.ico" type="image/x-icon" />
   <link rel="preconnect" href="https://cdn.tailwindcss.com" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <!-- NOTE: Pretendard는 환경에 따라 로딩 경로가 다를 수 있어, 미로딩 시 시스템 폰트로 자연스럽게 폴백됩니다. -->
-  <link href="https://fonts.googleapis.com/css2?family=Pretendard:wght@100;300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100;300;400;500;700;900&display=swap" rel="stylesheet" />
 
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
     tailwind.config = {
       theme: {
         extend: {
-          fontFamily: { 'sans': ['Pretendard', 'ui-sans-serif', 'system-ui', '-apple-system', 'Segoe UI', 'Roboto', 'Noto Sans KR', 'Apple SD Gothic Neo', 'sans-serif'] },
+          fontFamily: { 'sans': ['Noto Sans KR', 'Noto Sans', 'ui-sans-serif', 'system-ui', '-apple-system', 'Segoe UI', 'Roboto', 'Apple SD Gothic Neo', 'sans-serif'] },
           colors: {
             'cosmic-dark': '#030305',
             'stardust': 'rgba(255, 255, 255, 0.08)',
@@ -32,19 +31,81 @@
     }
   </script>
 
-  <script>document.documentElement.classList.add('js');</script>
+  <script>
+    document.documentElement.classList.add('js');
+    try {
+      if (localStorage.getItem('bennett_theme_v1') === 'light') {
+        document.documentElement.dataset.theme = 'light';
+      }
+    } catch {}
+  </script>
 
   <style>
     :root {
       --accent-glow: linear-gradient(135deg, #6366f1, #a855f7, #ec4899);
+      --page-bg: #000000;
+      --canvas-bg: radial-gradient(circle at 50% -20%, #111827 0%, #000000 80%);
+      --nebula-filter: saturate(110%);
+      --nebula-a: rgba(99, 102, 241, 0.07);
+      --nebula-b: rgba(168, 85, 247, 0.07);
+      --nebula-c: rgba(236, 72, 153, 0.03);
+      --topbar-bg: rgba(0, 0, 0, 0.42);
+      --topbar-border: rgba(255, 255, 255, 0.08);
+      --topbar-blur: 10px;
+      --surface-soft: rgba(255, 255, 255, 0.04);
+      --surface-soft-hover: rgba(255, 255, 255, 0.06);
+      --surface-strong: rgba(255, 255, 255, 0.05);
+      --surface-strong-hover: rgba(255, 255, 255, 0.07);
+      --control-border: rgba(255, 255, 255, 0.10);
+      --control-border-strong: rgba(255, 255, 255, 0.18);
       --card-glass: rgba(10, 10, 12, 0.62);
+      --card-glass-strong: rgba(10, 10, 12, 0.74);
+      --card-hover-bg: rgba(20, 20, 25, 0.84);
       --card-border: rgba(255, 255, 255, 0.10);
       --card-border-strong: rgba(255, 255, 255, 0.18);
+      --card-edge: linear-gradient(135deg, rgba(255,255,255,0.14), rgba(255,255,255,0) 40%, rgba(255,255,255,0.14) 100%);
       --text-primary: #ffffff;
       --text-secondary: #94a3b8;
+      --text-muted: rgba(203, 213, 225, 0.92);
+      --brand-color: #ffffff;
+      --brand-sub-color: rgba(148, 163, 184, 0.95);
+      --search-bg: rgba(10, 10, 12, 0.55);
+      --search-bg-focus: rgba(10, 10, 12, 0.68);
+      --search-placeholder: rgba(148, 163, 184, 0.85);
+      --kbd-bg: rgba(255, 255, 255, 0.04);
+      --kbd-border: rgba(255, 255, 255, 0.12);
+      --kbd-color: rgba(226, 232, 240, 0.75);
+      --hero-badge-bg: rgba(255, 255, 255, 0.05);
+      --hero-badge-border: rgba(255, 255, 255, 0.10);
+      --hero-badge-color: #e2e8f0;
+      --hero-title-gradient: linear-gradient(180deg, #ffffff 0%, #94a3b8 100%);
+      --hero-title-shadow: 0 0 42px rgba(255, 255, 255, 0.10);
+      --quick-bg: rgba(10, 10, 12, 0.45);
+      --quick-border: rgba(255, 255, 255, 0.10);
+      --quick-link-bg: rgba(255, 255, 255, 0.04);
+      --quick-link-bg-hover: rgba(255, 255, 255, 0.06);
+      --quick-link-border: rgba(255, 255, 255, 0.10);
+      --empty-bg: rgba(10, 10, 12, 0.35);
+      --empty-border: rgba(255, 255, 255, 0.16);
+      --footer-color: rgba(148, 163, 184, 0.72);
+      --skip-bg: rgba(255, 255, 255, 0.08);
+      --skip-border: rgba(255, 255, 255, 0.18);
+      --icon-glow-bg: rgba(255, 255, 255, 0.05);
+      --icon-glow-bg-hover: rgba(255, 255, 255, 0.10);
+      --icon-glow-border: rgba(255, 255, 255, 0.08);
+      --icon-glow-border-hover: rgba(255, 255, 255, 0.24);
+      --card-title-color: #ffffff;
+      --card-desc-color: rgba(203, 213, 225, 0.92);
+      --card-label-color: #a5b4fc;
+      --status-pill-text: rgba(226, 232, 240, 0.92);
+      --status-pill-bg: rgba(255, 255, 255, 0.04);
+      --status-pill-border: rgba(255, 255, 255, 0.10);
+      --star-rgb: 255, 255, 255;
+      --star-trail: rgba(3, 3, 5, 0.18);
+      --theme-shadow: 0 16px 30px -6px rgba(0, 0, 0, 0.40);
 
       --ring: rgba(99, 102, 241, 0.75);
-      --shadow: 0 20px 40px -5px rgba(0, 0, 0, 0.55);
+      --shadow: 0 16px 34px -8px rgba(0, 0, 0, 0.42);
 
       --radius: 28px;
       --radius-sm: 14px;
@@ -52,13 +113,77 @@
       --space-sm: 16px;
     }
 
+    :root[data-theme="light"] {
+      color-scheme: light;
+      --page-bg: #eef3fb;
+      --canvas-bg: radial-gradient(circle at 50% -20%, #ffffff 0%, #e7effb 74%, #d9e5f7 100%);
+      --nebula-filter: saturate(104%);
+      --nebula-a: rgba(99, 102, 241, 0.10);
+      --nebula-b: rgba(56, 189, 248, 0.09);
+      --nebula-c: rgba(236, 72, 153, 0.05);
+      --topbar-bg: rgba(246, 249, 255, 0.76);
+      --topbar-border: rgba(91, 114, 145, 0.12);
+      --surface-soft: rgba(255, 255, 255, 0.66);
+      --surface-soft-hover: rgba(255, 255, 255, 0.86);
+      --surface-strong: rgba(255, 255, 255, 0.74);
+      --surface-strong-hover: rgba(255, 255, 255, 0.94);
+      --control-border: rgba(91, 114, 145, 0.14);
+      --control-border-strong: rgba(91, 114, 145, 0.22);
+      --card-glass: rgba(255, 255, 255, 0.72);
+      --card-glass-strong: rgba(255, 255, 255, 0.86);
+      --card-hover-bg: rgba(255, 255, 255, 0.92);
+      --card-border: rgba(91, 114, 145, 0.12);
+      --card-border-strong: rgba(91, 114, 145, 0.20);
+      --card-edge: linear-gradient(135deg, rgba(255,255,255,0.82), rgba(255,255,255,0.10) 40%, rgba(255,255,255,0.72) 100%);
+      --text-primary: #172033;
+      --text-secondary: #5f6f84;
+      --text-muted: rgba(70, 85, 105, 0.88);
+      --brand-color: #172033;
+      --brand-sub-color: rgba(95, 111, 132, 0.96);
+      --search-bg: rgba(255, 255, 255, 0.76);
+      --search-bg-focus: rgba(255, 255, 255, 0.94);
+      --search-placeholder: rgba(95, 111, 132, 0.82);
+      --kbd-bg: rgba(23, 32, 51, 0.04);
+      --kbd-border: rgba(91, 114, 145, 0.14);
+      --kbd-color: rgba(95, 111, 132, 0.90);
+      --hero-badge-bg: rgba(255, 255, 255, 0.68);
+      --hero-badge-border: rgba(91, 114, 145, 0.12);
+      --hero-badge-color: #415066;
+      --hero-title-gradient: linear-gradient(180deg, #16335d 0%, #4a6ca5 100%);
+      --hero-title-shadow: 0 16px 36px rgba(74, 108, 165, 0.12);
+      --quick-bg: rgba(255, 255, 255, 0.58);
+      --quick-border: rgba(91, 114, 145, 0.12);
+      --quick-link-bg: rgba(255, 255, 255, 0.78);
+      --quick-link-bg-hover: rgba(255, 255, 255, 0.94);
+      --quick-link-border: rgba(91, 114, 145, 0.12);
+      --empty-bg: rgba(255, 255, 255, 0.56);
+      --empty-border: rgba(91, 114, 145, 0.16);
+      --footer-color: rgba(95, 111, 132, 0.78);
+      --skip-bg: rgba(255, 255, 255, 0.84);
+      --skip-border: rgba(91, 114, 145, 0.16);
+      --icon-glow-bg: rgba(255, 255, 255, 0.62);
+      --icon-glow-bg-hover: rgba(255, 255, 255, 0.88);
+      --icon-glow-border: rgba(91, 114, 145, 0.10);
+      --icon-glow-border-hover: rgba(91, 114, 145, 0.20);
+      --card-title-color: #172033;
+      --card-desc-color: rgba(70, 85, 105, 0.90);
+      --card-label-color: #5872b3;
+      --status-pill-text: rgba(23, 32, 51, 0.88);
+      --status-pill-bg: rgba(23, 32, 51, 0.04);
+      --status-pill-border: rgba(91, 114, 145, 0.10);
+      --star-rgb: 92, 128, 182;
+      --star-trail: rgba(239, 244, 252, 0.34);
+      --theme-shadow: 0 16px 28px -10px rgba(63, 84, 118, 0.20);
+    }
+
     html, body { height: 100%; }
     body {
-      background-color: #000;
+      background-color: var(--page-bg);
       color: var(--text-primary);
       overflow-x: hidden;
       -webkit-font-smoothing: antialiased;
       margin: 0;
+      font-family: 'Noto Sans KR', 'Noto Sans', sans-serif;
     }
 
     /* Skip link */
@@ -68,9 +193,9 @@
       top: 12px;
       padding: 10px 12px;
       border-radius: 10px;
-      background: rgba(255,255,255,0.08);
-      border: 1px solid rgba(255,255,255,0.18);
-      backdrop-filter: blur(10px);
+      background: var(--skip-bg);
+      border: 1px solid var(--skip-border);
+      backdrop-filter: blur(6px);
       transform: translateY(-140%);
       transition: transform .2s ease;
       z-index: 9999;
@@ -82,16 +207,16 @@
     /* CANVAS STARFALL BACKGROUND */
     #starfall-canvas {
       position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -2;
-      background: radial-gradient(circle at 50% -20%, #111827 0%, #000000 80%);
+      background: var(--canvas-bg);
     }
 
     .nebula-overlay {
       position: fixed; inset: 0; z-index: -1; pointer-events: none;
       background:
-        radial-gradient(circle at 0% 0%, rgba(99, 102, 241, 0.07) 0%, transparent 50%),
-        radial-gradient(circle at 100% 100%, rgba(168, 85, 247, 0.07) 0%, transparent 50%),
-        radial-gradient(circle at 70% 25%, rgba(236, 72, 153, 0.03) 0%, transparent 50%);
-      filter: saturate(110%);
+        radial-gradient(circle at 0% 0%, var(--nebula-a) 0%, transparent 50%),
+        radial-gradient(circle at 100% 100%, var(--nebula-b) 0%, transparent 50%),
+        radial-gradient(circle at 70% 25%, var(--nebula-c) 0%, transparent 50%);
+      filter: var(--nebula-filter);
     }
 
     /* Sticky topbar (search + filters) */
@@ -99,10 +224,10 @@
       position: sticky;
       top: 0;
       z-index: 50;
-      backdrop-filter: blur(18px);
-      -webkit-backdrop-filter: blur(18px);
-      background: rgba(0,0,0,0.45);
-      border-bottom: 1px solid rgba(255,255,255,0.08);
+      backdrop-filter: blur(var(--topbar-blur));
+      -webkit-backdrop-filter: blur(var(--topbar-blur));
+      background: var(--topbar-bg);
+      border-bottom: 1px solid var(--topbar-border);
     }
     .topbar-inner {
       max-width: 1400px;
@@ -120,7 +245,7 @@
       font-weight: 900;
       letter-spacing: -0.02em;
       text-decoration: none;
-      color: #fff;
+      color: var(--brand-color);
       user-select: none;
     }
     .brand-badge {
@@ -132,7 +257,7 @@
     }
     .brand-sub {
       font-weight: 700;
-      color: rgba(148, 163, 184, 0.95);
+      color: var(--brand-sub-color);
       letter-spacing: 0.02em;
       font-size: 12px;
     }
@@ -154,17 +279,17 @@
       width: 100%;
       padding: 12px 40px 12px 42px;
       border-radius: 14px;
-      border: 1px solid rgba(255,255,255,0.10);
-      background: rgba(10, 10, 12, 0.55);
-      color: #fff;
+      border: 1px solid var(--control-border);
+      background: var(--search-bg);
+      color: var(--text-primary);
       outline: none;
       transition: border-color .2s ease, box-shadow .2s ease, background .2s ease;
     }
-    .search-input::placeholder { color: rgba(148,163,184,0.85); }
+    .search-input::placeholder { color: var(--search-placeholder); }
     .search-input:focus {
       border-color: rgba(99,102,241,0.55);
       box-shadow: 0 0 0 3px rgba(99,102,241,0.25);
-      background: rgba(10, 10, 12, 0.7);
+      background: var(--search-bg-focus);
     }
     .search-icon {
       position: absolute;
@@ -181,11 +306,11 @@
       transform: translateY(-50%);
       font-size: 11px;
       letter-spacing: 0.06em;
-      color: rgba(226,232,240,0.75);
-      border: 1px solid rgba(255,255,255,0.12);
+      color: var(--kbd-color);
+      border: 1px solid var(--kbd-border);
       padding: 4px 8px;
       border-radius: 10px;
-      background: rgba(255,255,255,0.04);
+      background: var(--kbd-bg);
       user-select: none;
     }
 
@@ -195,9 +320,9 @@
       gap: 8px;
       padding: 10px 12px;
       border-radius: 14px;
-      background: rgba(255,255,255,0.05);
-      border: 1px solid rgba(255,255,255,0.10);
-      color: rgba(226,232,240,0.95);
+      background: var(--surface-strong);
+      border: 1px solid var(--control-border);
+      color: var(--text-primary);
       font-weight: 800;
       letter-spacing: 0.02em;
       font-size: 12px;
@@ -205,7 +330,7 @@
       user-select: none;
       white-space: nowrap;
     }
-    .icon-btn:hover { transform: translateY(-1px); border-color: rgba(255,255,255,0.18); background: rgba(255,255,255,0.07); }
+    .icon-btn:hover { transform: translateY(-1px); border-color: var(--control-border-strong); background: var(--surface-strong-hover); }
     .icon-btn:focus-visible { outline: none; box-shadow: 0 0 0 3px var(--ring); }
     .icon-btn[aria-pressed="false"] { opacity: 0.78; }
     .icon-btn .dot { width: 8px; height: 8px; border-radius: 99px; background: rgba(34,197,94,0.9); box-shadow: 0 0 10px rgba(34,197,94,0.45); }
@@ -223,16 +348,16 @@
     .chip {
       padding: 8px 12px;
       border-radius: 999px;
-      border: 1px solid rgba(255,255,255,0.10);
-      background: rgba(255,255,255,0.04);
-      color: rgba(226,232,240,0.92);
+      border: 1px solid var(--control-border);
+      background: var(--surface-soft);
+      color: var(--text-primary);
       font-weight: 800;
       letter-spacing: 0.02em;
       font-size: 12px;
       transition: background .2s ease, border-color .2s ease, transform .2s ease;
       user-select: none;
     }
-    .chip:hover { transform: translateY(-1px); border-color: rgba(255,255,255,0.18); background: rgba(255,255,255,0.06); }
+    .chip:hover { transform: translateY(-1px); border-color: var(--control-border-strong); background: var(--surface-soft-hover); }
     .chip:focus-visible { outline: none; box-shadow: 0 0 0 3px rgba(99,102,241,0.35); }
     .chip.is-active {
       border-color: rgba(99,102,241,0.55);
@@ -253,8 +378,8 @@
     }
     .hero-badge {
       display: inline-flex; align-items: center; gap: 8px; padding: 7px 16px; border-radius: 100px;
-      background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.10);
-      font-size: 13px; font-weight: 700; letter-spacing: 0.05em; color: #e2e8f0; margin-bottom: 18px; backdrop-filter: blur(10px);
+      background: var(--hero-badge-bg); border: 1px solid var(--hero-badge-border);
+      font-size: 13px; font-weight: 700; letter-spacing: 0.05em; color: var(--hero-badge-color); margin-bottom: 18px; backdrop-filter: blur(6px);
     }
     .hero-title {
       font-size: clamp(2.6rem, 6.7vw, 6rem);
@@ -262,10 +387,24 @@
       line-height: 0.98;
       letter-spacing: -0.045em;
       margin: 0 0 18px;
-      background: linear-gradient(180deg, #ffffff 0%, #94a3b8 100%);
+      background: var(--hero-title-gradient);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
-      text-shadow: 0 0 60px rgba(255, 255, 255, 0.12);
+      text-shadow: var(--hero-title-shadow);
+    }
+
+    .hero-copy {
+      color: var(--text-secondary);
+      font-size: 1.125rem;
+      font-weight: 500;
+      line-height: 1.75;
+      max-width: 42rem;
+      margin: 0 auto;
+    }
+
+    .hero-copy-strong {
+      color: var(--text-primary);
+      font-weight: 700;
     }
 
     /* Quick (recent) row */
@@ -283,15 +422,15 @@
       align-items: center;
       padding: 12px 14px;
       border-radius: 18px;
-      border: 1px solid rgba(255,255,255,0.10);
-      background: rgba(10,10,12,0.45);
-      backdrop-filter: blur(14px);
-      -webkit-backdrop-filter: blur(14px);
+      border: 1px solid var(--quick-border);
+      background: var(--quick-bg);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
     }
     .quick strong {
       font-size: 12px;
       letter-spacing: 0.06em;
-      color: rgba(226,232,240,0.9);
+      color: var(--text-primary);
       margin-right: 6px;
       text-transform: uppercase;
     }
@@ -301,13 +440,13 @@
       letter-spacing: 0.02em;
       padding: 8px 10px;
       border-radius: 999px;
-      border: 1px solid rgba(255,255,255,0.10);
-      background: rgba(255,255,255,0.04);
+      border: 1px solid var(--quick-link-border);
+      background: var(--quick-link-bg);
       text-decoration: none;
-      color: rgba(226,232,240,0.92);
+      color: var(--text-primary);
       transition: transform .2s ease, border-color .2s ease, background .2s ease;
     }
-    .quick a:hover { transform: translateY(-1px); border-color: rgba(255,255,255,0.18); background: rgba(255,255,255,0.06); }
+    .quick a:hover { transform: translateY(-1px); border-color: var(--control-border-strong); background: var(--quick-link-bg-hover); }
     .quick a:focus-visible { outline: none; box-shadow: 0 0 0 3px rgba(99,102,241,0.35); }
 
     /* COSMIC GLASS CARD ENGINE */
@@ -336,8 +475,8 @@
       background: var(--card-glass);
       border: 1px solid var(--card-border);
       border-radius: var(--radius);
-      backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
       overflow: hidden;
       transition: transform .25s cubic-bezier(0.23, 1, 0.32, 1),
                   background .25s ease,
@@ -347,6 +486,9 @@
       flex-direction: column;
       text-decoration: none;
       isolation: isolate;
+      contain: layout paint style;
+      content-visibility: auto;
+      contain-intrinsic-size: 260px;
     }
     .cosmic-card::after {
       content: '';
@@ -354,7 +496,7 @@
       inset: 0;
       border-radius: var(--radius);
       padding: 1px;
-      background: linear-gradient(135deg, rgba(255,255,255,0.14), rgba(255,255,255,0) 40%, rgba(255,255,255,0.14) 100%);
+      background: var(--card-edge);
       -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
       mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
       mask-composite: exclude;
@@ -366,9 +508,9 @@
     /* Hover & Focus */
     .cosmic-card:hover {
       transform: translateY(-6px);
-      background: rgba(20, 20, 25, 0.86);
+      background: var(--card-hover-bg);
       border-color: var(--card-border-strong);
-      box-shadow: var(--shadow), 0 0 26px -6px rgba(99, 102, 241, 0.18);
+      box-shadow: var(--shadow), 0 0 18px -8px rgba(99, 102, 241, 0.18);
     }
     .cosmic-card:focus-visible {
       outline: none;
@@ -387,8 +529,8 @@
 
     .icon-glow {
       width: 60px; height: 60px; border-radius: 18px;
-      background: rgba(255, 255, 255, 0.05);
-      border: 1px solid rgba(255, 255, 255, 0.08);
+      background: var(--icon-glow-bg);
+      border: 1px solid var(--icon-glow-border);
       display: flex; align-items: center; justify-content: center;
       font-size: 28px;
       margin-bottom: 22px;
@@ -404,15 +546,15 @@
     }
     .cosmic-card:hover .icon-glow, .cosmic-card:focus-visible .icon-glow {
       transform: scale(1.05) translateY(-2px);
-      background: rgba(255, 255, 255, 0.10);
-      border-color: rgba(255, 255, 255, 0.24);
-      box-shadow: 0 0 26px rgba(255, 255, 255, 0.06);
+      background: var(--icon-glow-bg-hover);
+      border-color: var(--icon-glow-border-hover);
+      box-shadow: 0 0 18px rgba(255, 255, 255, 0.06);
     }
     .cosmic-card:hover .icon-glow::before, .cosmic-card:focus-visible .icon-glow::before { opacity: 1; }
 
     .card-label {
       font-size: 0.72rem; font-weight: 900; letter-spacing: 0.12em; text-transform: uppercase;
-      color: #a5b4fc; margin-bottom: 8px; display: inline-flex; align-items: center; gap: 8px;
+      color: var(--card-label-color); margin-bottom: 8px; display: inline-flex; align-items: center; gap: 8px;
     }
     .status-pill {
       font-size: 10px;
@@ -420,17 +562,17 @@
       font-weight: 900;
       padding: 4px 8px;
       border-radius: 999px;
-      border: 1px solid rgba(255,255,255,0.10);
-      background: rgba(255,255,255,0.04);
-      color: rgba(226,232,240,0.92);
+      border: 1px solid var(--status-pill-border);
+      background: var(--status-pill-bg);
+      color: var(--status-pill-text);
       text-transform: uppercase;
     }
     .status-pill.ready { border-color: rgba(34,197,94,0.22); background: rgba(34,197,94,0.10); }
     .status-pill.beta  { border-color: rgba(234,179,8,0.22); background: rgba(234,179,8,0.10); }
     .status-pill.soon  { border-color: rgba(148,163,184,0.18); background: rgba(148,163,184,0.08); }
 
-    .card-title { font-size: 1.55rem; font-weight: 900; color: #ffffff; margin-bottom: 12px; letter-spacing: -0.02em; }
-    .card-desc  { font-size: 0.96rem; color: rgba(203, 213, 225, 0.92); line-height: 1.65; font-weight: 500; flex-grow: 1; }
+    .card-title { font-size: 1.55rem; font-weight: 900; color: var(--card-title-color); margin-bottom: 12px; letter-spacing: -0.02em; }
+    .card-desc  { font-size: 0.96rem; color: var(--card-desc-color); line-height: 1.65; font-weight: 500; flex-grow: 1; }
 
     /* CTA: 모바일/터치에서도 항상 보이도록 */
     .card-cta {
@@ -439,7 +581,7 @@
       font-weight: 900;
       letter-spacing: 0.06em;
       text-transform: uppercase;
-      color: #a5b4fc;
+      color: var(--card-label-color);
       display: inline-flex;
       align-items: center;
       gap: 6px;
@@ -455,7 +597,7 @@
     .ext {
       font-size: 11px;
       letter-spacing: 0.08em;
-      color: rgba(148,163,184,0.85);
+      color: var(--text-secondary);
       font-weight: 900;
       margin-left: 8px;
       text-transform: uppercase;
@@ -480,18 +622,18 @@
       display: none;
       padding: 26px;
       border-radius: 22px;
-      border: 1px dashed rgba(255,255,255,0.16);
-      background: rgba(10,10,12,0.35);
-      color: rgba(226,232,240,0.92);
+      border: 1px dashed var(--empty-border);
+      background: var(--empty-bg);
+      color: var(--text-primary);
       text-align: center;
     }
     .empty-state strong { display: block; font-size: 16px; font-weight: 900; letter-spacing: -0.01em; margin-bottom: 6px; }
-    .empty-state p { margin: 0; color: rgba(148,163,184,0.95); }
+    .empty-state p { margin: 0; color: var(--text-secondary); }
 
     /* Reveal: progressive enhancement */
     .reveal { opacity: 1; transform: none; }
     .js .reveal { opacity: 0; transform: translateY(14px); }
-    .js .reveal.is-visible { opacity: 1; transform: none; transition: opacity .7s cubic-bezier(0.16, 1, 0.3, 1), transform .7s cubic-bezier(0.16, 1, 0.3, 1); }
+    .js .reveal.is-visible { opacity: 1; transform: none; transition: opacity .45s cubic-bezier(0.16, 1, 0.3, 1), transform .45s cubic-bezier(0.16, 1, 0.3, 1); }
 
     /* Reduced motion */
     @media (prefers-reduced-motion: reduce) {
@@ -499,14 +641,14 @@
       .cosmic-card, .icon-glow, .chip, .icon-btn, .card-cta, .search-input { transition: none !important; }
       .cosmic-card:hover, .cosmic-card:focus-visible { transform: none !important; }
       .js .reveal { opacity: 1 !important; transform: none !important; }
-      #starfall-canvas { background: radial-gradient(circle at 50% -20%, #0b1222 0%, #000000 80%); }
+      #starfall-canvas { background: var(--canvas-bg); }
     }
 
     /* Footer */
     footer {
       padding: 64px 16px;
       text-align: center;
-      color: rgba(148,163,184,0.72);
+      color: var(--footer-color);
       font-size: 11px;
       font-weight: 800;
       letter-spacing: 0.14em;
@@ -558,6 +700,11 @@
           배경 효과
         </button>
 
+        <button id="toggle-theme" class="icon-btn" type="button" aria-pressed="false" title="라이트모드 전환">
+          <span aria-hidden="true">Light</span>
+          라이트모드
+        </button>
+
         <button id="toggle-contrast" class="icon-btn" type="button" aria-pressed="false" title="가독성 강화 모드">
           <span aria-hidden="true">Aa</span>
           가독성
@@ -586,9 +733,9 @@
       Bennett<br />Program
     </h1>
 
-    <p class="text-slate-400 text-lg max-w-2xl mx-auto font-medium leading-relaxed reveal">
+    <p class="hero-copy reveal">
       GWJ2 센터 운영 효율화를 위한 <br />
-      <span class="text-white font-semibold">프리미엄 통합 솔루션 허브</span>
+      <span class="hero-copy-strong">프리미엄 통합 솔루션 허브</span>
     </p>
   </header>
 
@@ -715,6 +862,34 @@
           <p class="card-desc text-sm">스마트 근무 스케줄링 및 연장 근무 관리 시스템.</p>
           <div class="card-cta !mt-auto">
             Open <span aria-hidden="true">→</span><span class="ext" aria-hidden="true">new tab</span>
+          </div>
+        </div>
+      </div>
+    </a>
+
+    <a
+      href="https://qogmlwo000.github.io/gwj2obpickhuman/"
+      target="_blank"
+      rel="noopener noreferrer"
+      class="cosmic-card col-span-6 row-span-1 reveal"
+      data-card
+      data-category="hr"
+      data-title="집품층 공유 시트"
+      data-desc="GWJ2 OB 집품층 근무 인원을 층별로 확인하고 공유하는 시트"
+      data-tags="집품층 공유 시트 shared sheet floor staffing gwj2 ob human"
+      aria-label="집품층 공유 시트 (새 탭에서 열기)"
+    >
+      <div class="card-inner flex-row items-start gap-6">
+        <div class="icon-glow text-sky-400 mb-0 shrink-0" aria-hidden="true">&#128203;</div>
+        <div class="flex flex-col h-full">
+          <span class="card-label">
+            Shared Sheet
+            <span class="status-pill ready" aria-label="상태: Ready">Ready</span>
+          </span>
+          <h3 class="card-title text-xl mb-1">집품층 공유 시트</h3>
+          <p class="card-desc text-sm">GWJ2 OB 집품층 근무 인원을 층별로 확인하고 공유하는 시트.</p>
+          <div class="card-cta !mt-auto">
+            Open <span aria-hidden="true">&#8599;</span><span class="ext" aria-hidden="true">new tab</span>
           </div>
         </div>
       </div>
@@ -966,12 +1141,50 @@
 
     renderRecent();
 
+    // Theme mode (dark/light)
+    const THEME_KEY = 'bennett_theme_v1';
+    const toggleThemeBtn = $('#toggle-theme');
+    const themeColorMeta = document.querySelector('meta[name="theme-color"]');
+    let currentTheme = localStorage.getItem(THEME_KEY) === 'light' ? 'light' : 'dark';
+
+    function syncThemeMeta() {
+      if (themeColorMeta) {
+        themeColorMeta.setAttribute('content', currentTheme === 'light' ? '#eef3fb' : '#030305');
+      }
+    }
+
+    function setTheme(theme) {
+      currentTheme = theme === 'light' ? 'light' : 'dark';
+      document.documentElement.dataset.theme = currentTheme;
+      toggleThemeBtn.setAttribute('aria-pressed', currentTheme === 'light' ? 'true' : 'false');
+      toggleThemeBtn.setAttribute('title', currentTheme === 'light' ? '다크모드로 전환' : '라이트모드로 전환');
+      try { localStorage.setItem(THEME_KEY, currentTheme); } catch {}
+      syncThemeMeta();
+      applyContrastTuning();
+      refreshStarPalette();
+
+      if (starsEnabled && !prefersReduced && !document.hidden) {
+        restartStarfall();
+      } else if (!starsEnabled) {
+        stopStarfall();
+      }
+    }
+
+    toggleThemeBtn.addEventListener('click', () => {
+      setTheme(currentTheme === 'light' ? 'dark' : 'light');
+    });
+
     // Starfall Engine (Canvas) with perf + user toggle + reduced motion respect
     const canvas = document.getElementById('starfall-canvas');
     const ctx = canvas.getContext('2d', { alpha: true });
     let width = 0, height = 0, dpr = 1;
     let stars = [];
     let rafId = null;
+    let resizeRafId = null;
+    let lastFrameTime = 0;
+    let starStrokeRgb = '255, 255, 255';
+    let starTrailFill = 'rgba(3, 3, 5, 0.18)';
+    const FRAME_INTERVAL = 1000 / 36;
 
     const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
@@ -999,10 +1212,16 @@
     let starsEnabled = getStarsEnabledDefault();
     toggleStarsBtn.setAttribute('aria-pressed', starsEnabled ? 'true' : 'false');
 
+    function refreshStarPalette() {
+      const styles = getComputedStyle(document.documentElement);
+      starStrokeRgb = (styles.getPropertyValue('--star-rgb') || '255, 255, 255').trim();
+      starTrailFill = (styles.getPropertyValue('--star-trail') || 'rgba(3, 3, 5, 0.18)').trim();
+    }
+
     function resize() {
       width = window.innerWidth;
       height = window.innerHeight;
-      dpr = Math.min(window.devicePixelRatio || 1, 2);
+      dpr = Math.min(window.devicePixelRatio || 1, width < 768 ? 1 : 1.35);
       canvas.width = Math.floor(width * dpr);
       canvas.height = Math.floor(height * dpr);
       canvas.style.width = width + 'px';
@@ -1030,8 +1249,8 @@
       }
       draw() {
         ctx.beginPath();
-        ctx.strokeStyle = `rgba(255, 255, 255, ${this.opacity})`;
-        ctx.lineWidth = this.z * 0.5;
+        ctx.strokeStyle = `rgba(${starStrokeRgb}, ${this.opacity})`;
+        ctx.lineWidth = Math.max(0.45, this.z * 0.45);
         ctx.moveTo(this.x, this.y);
         ctx.lineTo(this.x + (this.len * 0.15), this.y - this.len);
         ctx.stroke();
@@ -1040,15 +1259,25 @@
 
     function initStars() {
       stars = [];
-      // Adaptive density: fewer on mobile
-      const density = width < 640 ? 9800 : 7200;
+      // Adaptive density: keep the effect, but lighten GPU/CPU cost.
+      const density = width < 640 ? 18000 : width < 1024 ? 13500 : 11000;
       const starCount = Math.floor((width * height) / density);
       for (let i = 0; i < starCount; i++) stars.push(new Star());
     }
 
-    function animate() {
-      // trailing effect
-      ctx.fillStyle = 'rgba(3, 3, 5, 0.22)';
+    function animate(timestamp = 0) {
+      if (!starsEnabled || document.hidden) {
+        rafId = null;
+        return;
+      }
+
+      if (timestamp - lastFrameTime < FRAME_INTERVAL) {
+        rafId = requestAnimationFrame(animate);
+        return;
+      }
+
+      lastFrameTime = timestamp;
+      ctx.fillStyle = starTrailFill;
       ctx.fillRect(0, 0, width, height);
 
       for (let i = 0; i < stars.length; i++) {
@@ -1060,21 +1289,30 @@
 
     function startStarfall() {
       if (prefersReduced) return; // respect reduced motion
-      if (!starsEnabled) return;
+      if (!starsEnabled || document.hidden) return;
 
       cancelAnimationFrame(rafId);
+      rafId = null;
       resize();
+      refreshStarPalette();
       initStars();
+      lastFrameTime = 0;
       // initial clear
       ctx.clearRect(0, 0, width, height);
-      animate();
+      rafId = requestAnimationFrame(animate);
     }
 
     function stopStarfall() {
       cancelAnimationFrame(rafId);
       rafId = null;
+      lastFrameTime = 0;
       // keep gradient background, remove trails
       ctx.clearRect(0, 0, width, height);
+    }
+
+    function restartStarfall() {
+      stopStarfall();
+      startStarfall();
     }
 
     toggleStarsBtn.addEventListener('click', () => {
@@ -1087,8 +1325,12 @@
 
     window.addEventListener('resize', () => {
       if (!starsEnabled || prefersReduced) return;
-      resize();
-      initStars();
+      cancelAnimationFrame(resizeRafId);
+      resizeRafId = requestAnimationFrame(() => {
+        resize();
+        refreshStarPalette();
+        initStars();
+      });
     });
 
     // Contrast mode: slightly increase text contrast & card glass
@@ -1096,14 +1338,38 @@
     const toggleContrastBtn = $('#toggle-contrast');
     let contrastOn = localStorage.getItem(CONTRAST_KEY) === '1';
 
+    function applyContrastTuning() {
+      const isLight = currentTheme === 'light';
+      document.documentElement.style.setProperty(
+        '--card-glass',
+        isLight
+          ? (contrastOn ? 'rgba(255, 255, 255, 0.86)' : 'rgba(255, 255, 255, 0.72)')
+          : (contrastOn ? 'rgba(10, 10, 12, 0.74)' : 'rgba(10, 10, 12, 0.62)')
+      );
+      document.documentElement.style.setProperty(
+        '--card-border',
+        isLight
+          ? (contrastOn ? 'rgba(91, 114, 145, 0.18)' : 'rgba(91, 114, 145, 0.12)')
+          : (contrastOn ? 'rgba(255,255,255,0.14)' : 'rgba(255,255,255,0.10)')
+      );
+    }
+
     function setContrast(on) {
       contrastOn = !!on;
       toggleContrastBtn.setAttribute('aria-pressed', contrastOn ? 'true' : 'false');
       try { localStorage.setItem(CONTRAST_KEY, contrastOn ? '1' : '0'); } catch {}
-      document.documentElement.style.setProperty('--card-glass', contrastOn ? 'rgba(10, 10, 12, 0.74)' : 'rgba(10, 10, 12, 0.62)');
-      document.documentElement.style.setProperty('--card-border', contrastOn ? 'rgba(255,255,255,0.14)' : 'rgba(255,255,255,0.10)');
+      applyContrastTuning();
     }
     toggleContrastBtn.addEventListener('click', () => setContrast(!contrastOn));
+    document.addEventListener('visibilitychange', () => {
+      if (document.hidden) {
+        stopStarfall();
+      } else if (starsEnabled && !prefersReduced) {
+        startStarfall();
+      }
+    });
+
+    setTheme(currentTheme);
     setContrast(contrastOn);
 
     // Start starfall (if enabled)
