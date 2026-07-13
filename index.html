@@ -3,29 +3,746 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Bennett OS • GWJ2 OB</title>
+    <title>베넷 운영 도구 · GWJ2 OB</title>
 
-    <meta name="description" content="GWJ2 센터 운영 효율화를 위한 프리미엄 통합 솔루션 허브" />
-    <meta name="theme-color" content="#030305" />
-    <meta name="color-scheme" content="dark light" />
+    <meta name="description" content="GWJ2 센터 운영에 필요한 도구를 한곳에 모았습니다." />
+    <meta name="theme-color" content="#ffffff" />
+    <meta name="color-scheme" content="light dark" />
 
     <link rel="icon" type="image/x-icon" href="Bennett.ico" />
-	<link rel="shortcut icon" type="image/x-icon" href="Bennett.ico" />
+    <link rel="shortcut icon" type="image/x-icon" href="Bennett.ico" />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css"
+    />
 
     <script>
       try {
-        if (localStorage.getItem('bennett_theme_v1') === 'light') {
-          document.documentElement.classList.remove('dark');
-        } else {
+        if (localStorage.getItem('bennett_theme_v1') === 'dark') {
           document.documentElement.classList.add('dark');
         }
       } catch (e) {}
     </script>
-    <script type="module" crossorigin src="./assets/index-C4GxNi9N.js"></script>
-    <link rel="stylesheet" crossorigin href="./assets/index-DlBY-WG7.css">
+
+    <style>
+      :root {
+        --bg: #ffffff;
+        --bg-soft: #f7f8fa;
+        --card: #ffffff;
+        --card-border: #eceef1;
+        --text: #191f28;
+        --text-sub: #6b7684;
+        --text-faint: #8b95a1;
+        --accent: #3182f6;
+        --accent-soft: #e8f3ff;
+        --chip-bg: #f2f4f6;
+        --chip-text: #4e5968;
+        --shadow: 0 1px 2px rgba(25, 31, 40, 0.04), 0 4px 16px rgba(25, 31, 40, 0.05);
+        --shadow-hover: 0 2px 4px rgba(25, 31, 40, 0.05), 0 12px 28px rgba(25, 31, 40, 0.1);
+        --green: #00a661;
+        --green-soft: #e6f6ef;
+      }
+
+      .dark {
+        --bg: #101216;
+        --bg-soft: #17191f;
+        --card: #1b1e25;
+        --card-border: #262a33;
+        --text: #eceef1;
+        --text-sub: #9aa3af;
+        --text-faint: #6f7885;
+        --accent: #4a95f7;
+        --accent-soft: #1a2a42;
+        --chip-bg: #232730;
+        --chip-text: #b0b8c1;
+        --shadow: 0 1px 2px rgba(0, 0, 0, 0.2), 0 4px 16px rgba(0, 0, 0, 0.25);
+        --shadow-hover: 0 2px 4px rgba(0, 0, 0, 0.25), 0 12px 28px rgba(0, 0, 0, 0.4);
+        --green: #34c98a;
+        --green-soft: #16281f;
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      html {
+        scroll-behavior: smooth;
+      }
+
+      body {
+        font-family: 'Pretendard Variable', Pretendard, -apple-system, BlinkMacSystemFont,
+          'Apple SD Gothic Neo', 'Segoe UI', 'Malgun Gothic', sans-serif;
+        background: var(--bg);
+        color: var(--text);
+        -webkit-font-smoothing: antialiased;
+        line-height: 1.5;
+        transition: background 0.25s ease, color 0.25s ease;
+      }
+
+      .container {
+        max-width: 1040px;
+        margin: 0 auto;
+        padding: 0 24px;
+      }
+
+      /* ── 상단 바 ─────────────────────────── */
+      header {
+        position: sticky;
+        top: 0;
+        z-index: 10;
+        background: color-mix(in srgb, var(--bg) 82%, transparent);
+        backdrop-filter: blur(14px);
+        -webkit-backdrop-filter: blur(14px);
+        border-bottom: 1px solid var(--card-border);
+      }
+
+      .nav {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        height: 60px;
+      }
+
+      .brand {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        font-weight: 700;
+        font-size: 17px;
+        letter-spacing: -0.02em;
+      }
+
+      .brand img {
+        width: 28px;
+        height: 28px;
+        border-radius: 7px;
+      }
+
+      .theme-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 38px;
+        height: 38px;
+        border: none;
+        border-radius: 50%;
+        background: var(--chip-bg);
+        color: var(--chip-text);
+        cursor: pointer;
+        transition: background 0.15s ease;
+      }
+
+      .theme-btn:hover {
+        background: var(--card-border);
+      }
+
+      .theme-btn svg {
+        width: 18px;
+        height: 18px;
+      }
+
+      .dark .icon-moon { display: none; }
+      .icon-sun { display: none; }
+      .dark .icon-sun { display: block; }
+
+      /* ── 히어로 ─────────────────────────── */
+      .hero {
+        padding: 64px 0 40px;
+        text-align: center;
+      }
+
+      .hero h1 {
+        font-size: clamp(28px, 5vw, 42px);
+        font-weight: 800;
+        letter-spacing: -0.03em;
+        line-height: 1.25;
+      }
+
+      .hero p {
+        margin-top: 12px;
+        font-size: clamp(15px, 2.5vw, 18px);
+        color: var(--text-sub);
+      }
+
+      .search-wrap {
+        position: relative;
+        max-width: 480px;
+        margin: 28px auto 0;
+      }
+
+      .search-wrap svg {
+        position: absolute;
+        left: 18px;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 18px;
+        height: 18px;
+        color: var(--text-faint);
+        pointer-events: none;
+      }
+
+      .search-wrap input {
+        width: 100%;
+        height: 52px;
+        padding: 0 20px 0 48px;
+        font-size: 16px;
+        font-family: inherit;
+        color: var(--text);
+        background: var(--bg-soft);
+        border: 1.5px solid transparent;
+        border-radius: 16px;
+        outline: none;
+        transition: border-color 0.15s ease, background 0.15s ease;
+      }
+
+      .search-wrap input:focus {
+        border-color: var(--accent);
+        background: var(--card);
+      }
+
+      .search-wrap input::placeholder {
+        color: var(--text-faint);
+      }
+
+      /* ── 섹션 공통 ─────────────────────── */
+      section {
+        padding: 24px 0;
+      }
+
+      .section-title {
+        font-size: 20px;
+        font-weight: 700;
+        letter-spacing: -0.02em;
+        margin-bottom: 16px;
+      }
+
+      /* ── 바로가기 (최상단 고정) ─────────── */
+      .quick-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 14px;
+      }
+
+      .quick-card {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        padding: 22px 24px;
+        background: var(--card);
+        border: 1px solid var(--card-border);
+        border-radius: 20px;
+        box-shadow: var(--shadow);
+        text-decoration: none;
+        color: inherit;
+        transition: transform 0.15s ease, box-shadow 0.15s ease;
+      }
+
+      .quick-card:hover {
+        transform: translateY(-2px);
+        box-shadow: var(--shadow-hover);
+      }
+
+      .quick-card .icon {
+        flex: none;
+        width: 48px;
+        height: 48px;
+        border-radius: 14px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .quick-card .icon svg {
+        width: 24px;
+        height: 24px;
+      }
+
+      .quick-card h3 {
+        font-size: 17px;
+        font-weight: 700;
+        letter-spacing: -0.02em;
+      }
+
+      .quick-card p {
+        margin-top: 2px;
+        font-size: 14px;
+        color: var(--text-sub);
+      }
+
+      .quick-card .arrow {
+        margin-left: auto;
+        flex: none;
+        width: 18px;
+        height: 18px;
+        color: var(--text-faint);
+      }
+
+      /* ── 카테고리 칩 ────────────────────── */
+      .chips {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-bottom: 20px;
+      }
+
+      .chip {
+        padding: 9px 16px;
+        font-size: 14px;
+        font-weight: 600;
+        font-family: inherit;
+        color: var(--chip-text);
+        background: var(--chip-bg);
+        border: none;
+        border-radius: 999px;
+        cursor: pointer;
+        transition: background 0.15s ease, color 0.15s ease;
+      }
+
+      .chip:hover {
+        background: var(--card-border);
+      }
+
+      .chip.active {
+        color: #fff;
+        background: var(--accent);
+      }
+
+      /* ── 도구 카드 ─────────────────────── */
+      .tool-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 14px;
+      }
+
+      .tool-card {
+        display: flex;
+        flex-direction: column;
+        padding: 24px;
+        background: var(--card);
+        border: 1px solid var(--card-border);
+        border-radius: 20px;
+        box-shadow: var(--shadow);
+        text-decoration: none;
+        color: inherit;
+        transition: transform 0.15s ease, box-shadow 0.15s ease;
+      }
+
+      .tool-card:hover {
+        transform: translateY(-2px);
+        box-shadow: var(--shadow-hover);
+      }
+
+      .tool-card .icon {
+        width: 44px;
+        height: 44px;
+        border-radius: 13px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 16px;
+      }
+
+      .tool-card .icon svg {
+        width: 22px;
+        height: 22px;
+      }
+
+      .tool-card h3 {
+        font-size: 16px;
+        font-weight: 700;
+        letter-spacing: -0.02em;
+      }
+
+      .tool-card p {
+        margin-top: 6px;
+        font-size: 14px;
+        color: var(--text-sub);
+        flex-grow: 1;
+      }
+
+      .tool-card .meta {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin-top: 16px;
+      }
+
+      .badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+        padding: 4px 10px;
+        font-size: 12px;
+        font-weight: 600;
+        color: var(--green);
+        background: var(--green-soft);
+        border-radius: 999px;
+      }
+
+      .badge::before {
+        content: '';
+        width: 5px;
+        height: 5px;
+        border-radius: 50%;
+        background: var(--green);
+      }
+
+      .cat-label {
+        font-size: 12px;
+        font-weight: 500;
+        color: var(--text-faint);
+      }
+
+      .empty {
+        padding: 60px 0;
+        text-align: center;
+        color: var(--text-faint);
+        font-size: 15px;
+        display: none;
+      }
+
+      /* ── 아이콘 색상 ────────────────────── */
+      .c-blue   { background: #e8f3ff; color: #3182f6; }
+      .c-green  { background: #e6f6ef; color: #00a661; }
+      .c-orange { background: #fff1e0; color: #f28100; }
+      .c-purple { background: #f1ecff; color: #7d5ef7; }
+      .c-pink   { background: #ffecf2; color: #f04e8a; }
+      .c-teal   { background: #e0f7f5; color: #00a5a5; }
+      .c-red    { background: #ffeceb; color: #f04438; }
+      .c-yellow { background: #fff8dd; color: #d6a500; }
+
+      .dark .c-blue   { background: #1a2a42; color: #6aabff; }
+      .dark .c-green  { background: #16281f; color: #4bd693; }
+      .dark .c-orange { background: #332613; color: #ffa142; }
+      .dark .c-purple { background: #251f3d; color: #a48eff; }
+      .dark .c-pink   { background: #331c26; color: #ff7cab; }
+      .dark .c-teal   { background: #10302e; color: #3ecfcf; }
+      .dark .c-red    { background: #331b19; color: #ff7a70; }
+      .dark .c-yellow { background: #302a12; color: #ecc94b; }
+
+      /* ── 푸터 ──────────────────────────── */
+      footer {
+        margin-top: 48px;
+        padding: 32px 0 48px;
+        border-top: 1px solid var(--card-border);
+        text-align: center;
+        font-size: 13px;
+        color: var(--text-faint);
+      }
+
+      /* ── 반응형 ─────────────────────────── */
+      @media (max-width: 860px) {
+        .tool-grid {
+          grid-template-columns: repeat(2, 1fr);
+        }
+      }
+
+      @media (max-width: 560px) {
+        .hero {
+          padding: 44px 0 32px;
+        }
+        .quick-grid,
+        .tool-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
   </head>
-  <body class="antialiased">
-    <div id="root"></div>
+
+  <body>
+    <header>
+      <div class="container nav">
+        <div class="brand">
+          <img src="Bennett.png" alt="베넷 로고" />
+          베넷 운영 도구
+        </div>
+        <button class="theme-btn" id="themeToggle" aria-label="화면 모드 전환">
+          <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z" />
+          </svg>
+          <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="4" />
+            <path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4" />
+          </svg>
+        </button>
+      </div>
+    </header>
+
+    <main>
+      <div class="container">
+        <div class="hero">
+          <h1>GWJ2 운영 도구,<br />한곳에서 간편하게</h1>
+          <p>센터 운영에 필요한 도구와 문서를 모았습니다.</p>
+          <div class="search-wrap">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="11" cy="11" r="7" />
+              <path d="m20 20-3.5-3.5" />
+            </svg>
+            <input type="search" id="searchInput" placeholder="도구 이름이나 기능으로 검색" />
+          </div>
+        </div>
+
+        <!-- 바로가기: 최상단 고정 -->
+        <section id="quickSection">
+          <h2 class="section-title">바로가기</h2>
+          <div class="quick-grid">
+            <a class="quick-card" href="https://qogmlwo000.github.io/gwj25Processinformation/" target="_blank" rel="noopener">
+              <div class="icon c-blue">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                  <path d="M14 2v6h6M9 13h6M9 17h6" />
+                </svg>
+              </div>
+              <div>
+                <h3>GWJ 2/5 공정안내</h3>
+                <p>공정별 작업 순서와 기준을 한눈에</p>
+              </div>
+              <svg class="arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="m9 6 6 6-6 6" />
+              </svg>
+            </a>
+            <a class="quick-card" href="https://qogmlwo000.github.io/gwj2obsheet/" target="_blank" rel="noopener">
+              <div class="icon c-green">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <rect x="6" y="2" width="12" height="20" rx="2" />
+                  <path d="M10 18h4" />
+                </svg>
+              </div>
+              <div>
+                <h3>PDA 일지</h3>
+                <p>PDA 사용 현황을 기록하고 관리</p>
+              </div>
+              <svg class="arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="m9 6 6 6-6 6" />
+              </svg>
+            </a>
+          </div>
+        </section>
+
+        <!-- 전체 도구 -->
+        <section>
+          <h2 class="section-title">전체 도구</h2>
+          <div class="chips" id="chips"></div>
+          <div class="tool-grid" id="toolGrid"></div>
+          <div class="empty" id="emptyMsg">검색 결과가 없어요.</div>
+        </section>
+      </div>
+    </main>
+
+    <footer>
+      <div class="container">BENNETT PROGRAM · GWJ2 OB</div>
+    </footer>
+
+    <script>
+      // ── 데이터 ──────────────────────────────
+      const CATEGORIES = [
+        { id: 'all', label: '전체' },
+        { id: 'core', label: '핵심 도구' },
+        { id: 'analysis', label: '분석' },
+        { id: 'hr', label: '인사 · 근무' },
+        { id: 'utility', label: '유틸리티' },
+        { id: 'extension', label: '크롬 확장' },
+      ];
+
+      const CATEGORY_LABEL = Object.fromEntries(CATEGORIES.map((c) => [c.id, c.label]));
+
+      // 아이콘 SVG 조각
+      const ICONS = {
+        chart: '<path d="M3 3v18h18"/><path d="m7 15 4-5 3 3 5-7"/>',
+        radar: '<circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4"/><path d="M12 3v5M12 12l6 4"/>',
+        calendar: '<rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/>',
+        users: '<circle cx="9" cy="8" r="4"/><path d="M2 21c0-3.9 3.1-7 7-7s7 3.1 7 7"/><path d="M16 4a4 4 0 0 1 0 8M22 21c0-2.9-1.7-5.4-4.2-6.5"/>',
+        barcode: '<path d="M4 5v14M8 5v14M11 5v14M15 5v14M19 5v14M6 5v14" stroke-width="1.6"/>',
+        puzzle: '<path d="M10 3h4v3.5a1.5 1.5 0 0 0 3 0V6h4v4h-2.5a1.5 1.5 0 0 0 0 3H21v4h-4v2.5a1.5 1.5 0 0 1-3 0V17h-4v-4H7.5a1.5 1.5 0 0 1 0-3H10z"/>',
+        highlight: '<path d="m9 11 4 4L21 7l-4-4-8 8z"/><path d="m7 13-2 6 6-2"/><path d="M3 21h6"/>',
+        calc: '<rect x="4" y="2" width="16" height="20" rx="2"/><path d="M8 6h8M8 12h.01M12 12h.01M16 12h.01M8 16h.01M12 16h.01M16 16h.01"/>',
+        camera: '<path d="M4 8h3l2-3h6l2 3h3a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9a1 1 0 0 1 1-1z"/><circle cx="12" cy="13" r="3.5"/>',
+        text: '<path d="M4 7V5h16v2M12 5v14M9 19h6"/>',
+        alert: '<path d="M12 3 2 20h20z"/><path d="M12 10v4M12 17.5h.01"/>',
+      };
+
+      const TOOLS = [
+        {
+          id: 'htp-gwj2-ob',
+          title: 'HTP TOOL · GWJ2 OB',
+          desc: 'GWJ2 OB 전용 데이터 트래킹과 실시간 모니터링',
+          category: 'core',
+          url: 'https://qogmlwo000.github.io/gwj2pickpackhtp/',
+          tags: ['htp', 'ob', 'tracking', 'monitoring', 'gwj2', '트래킹', '모니터링'],
+          icon: 'chart',
+          color: 'blue',
+        },
+        {
+          id: 'checkrisk',
+          title: '마감 리스크 체크',
+          desc: 'PACK · PICK Exsd 마감 리스크 확인과 충원 추천',
+          category: 'core',
+          url: 'https://qogmlwo000.github.io/checkrisk/',
+          tags: ['checkrisk', 'exsd', 'risk', 'deadline', 'pack', 'pick', '마감', '리스크'],
+          icon: 'alert',
+          color: 'red',
+        },
+        {
+          id: 'htp-gwj2-ob-cfc',
+          title: 'HTP TOOL · GWJ2 OB CFC',
+          desc: 'CFC 존 전용 데이터 트래킹과 실시간 모니터링',
+          category: 'analysis',
+          url: 'https://qogmlwo000.github.io/gwj2pickpackhtpcfc/',
+          tags: ['htp', 'ob', 'cfc', 'tracking', 'monitoring', '분석', '트래킹'],
+          icon: 'radar',
+          color: 'purple',
+        },
+        {
+          id: 'ob-workday',
+          title: 'OB Workday',
+          desc: '근무 스케줄과 연장 근무를 관리하는 시스템',
+          category: 'hr',
+          url: 'https://qogmlwo000.github.io/gwj2workday/',
+          tags: ['workday', 'hr', 'schedule', 'overtime', 'ob', '근무', '스케줄', '연장'],
+          icon: 'calendar',
+          color: 'orange',
+        },
+        {
+          id: 'shared-sheet',
+          title: '집품층 공유 시트',
+          desc: 'GWJ2 OB 집품층 근무 인원을 층별로 확인하고 공유',
+          category: 'hr',
+          url: 'https://qogmlwo000.github.io/gwj2obpickhuman/',
+          tags: ['shared', 'sheet', 'floor', 'staffing', 'gwj2', 'ob', '집품', '인원', '시트'],
+          icon: 'users',
+          color: 'teal',
+        },
+        {
+          id: 'barcode-gen',
+          title: '바코드 생성기',
+          desc: '로케이션과 상품 바코드를 즉시 생성',
+          category: 'utility',
+          url: 'https://qogmlwo000.github.io/bennettbarcode/',
+          tags: ['barcode', 'generator', 'utility', 'location', 'sku', '바코드', '생성'],
+          icon: 'barcode',
+          color: 'green',
+        },
+        {
+          id: 'calculator',
+          title: '인시 계산기',
+          desc: '필요 인시를 빠르게 계산하는 도구',
+          category: 'utility',
+          url: 'https://qogmlwo000.github.io/bennettcalculator/',
+          tags: ['calculator', 'manpower', 'hours', 'utility', '인시', '계산'],
+          icon: 'calc',
+          color: 'pink',
+        },
+        {
+          id: 'wms-extender',
+          title: 'GWJ2 WMS Extender 2',
+          desc: 'WMS 기능을 확장하는 필수 크롬 확장 패키지',
+          category: 'extension',
+          url: 'https://chromewebstore.google.com/detail/gwj2-wms-extender-2/olncnmfjhjbghcmgkoklfkhcedblkkop',
+          tags: ['chrome', 'extension', 'wms', 'gwj2', 'extender', '확장'],
+          icon: 'puzzle',
+          color: 'purple',
+        },
+        {
+          id: 'highlighter',
+          title: '하이라이트 도구',
+          desc: '데이터 시인성을 높여 작업 오류를 줄이는 강조 도구',
+          category: 'extension',
+          url: 'https://chromewebstore.google.com/detail/%EB%B2%A0%EB%84%B7-%ED%95%98%EC%9D%B4%EB%9D%BC%EC%9D%B4%ED%8A%B8-%EB%8B%A4%EC%A4%91-%ED%85%8D%EC%8A%A4%ED%8A%B8-%EA%B0%95%EC%A1%B0/gkpciglfeimfhkeoahldlemimbnocled',
+          tags: ['highlighter', 'chrome', 'extension', 'visibility', '하이라이트', '강조'],
+          icon: 'highlight',
+          color: 'yellow',
+        },
+        {
+          id: 'paint-capture',
+          title: '페인트 캡처 도구',
+          desc: '웹페이지를 캡처하고 화면 위에 바로 그리기',
+          category: 'extension',
+          url: 'https://chromewebstore.google.com/detail/%EB%B2%A0%EB%84%B7-%ED%8E%98%EC%9D%B8%ED%8A%B8-%EC%BA%A1%EC%B2%98-%EB%8F%84%EA%B5%AC/gicmgegdofnlhgiohoocakgeppioaiob',
+          tags: ['paint', 'capture', 'chrome', 'extension', 'screenshot', '캡처', '그리기'],
+          icon: 'camera',
+          color: 'blue',
+        },
+        {
+          id: 'text-change',
+          title: '텍스트 치환 도구',
+          desc: '웹페이지의 특정 텍스트를 원하는 문구로 자동 치환',
+          category: 'extension',
+          url: 'https://chromewebstore.google.com/detail/hodocjglcafjicidbjfoekclomhlpkoh',
+          tags: ['text', 'change', 'replace', '치환', 'chrome', 'extension', '텍스트'],
+          icon: 'text',
+          color: 'orange',
+        },
+      ];
+
+      // ── 렌더링 ──────────────────────────────
+      const chipsEl = document.getElementById('chips');
+      const gridEl = document.getElementById('toolGrid');
+      const emptyEl = document.getElementById('emptyMsg');
+      const searchEl = document.getElementById('searchInput');
+
+      let activeCategory = 'all';
+      let keyword = '';
+
+      function renderChips() {
+        chipsEl.innerHTML = '';
+        for (const cat of CATEGORIES) {
+          const btn = document.createElement('button');
+          btn.className = 'chip' + (cat.id === activeCategory ? ' active' : '');
+          btn.textContent = cat.label;
+          btn.addEventListener('click', () => {
+            activeCategory = cat.id;
+            renderChips();
+            renderTools();
+          });
+          chipsEl.appendChild(btn);
+        }
+      }
+
+      function matches(tool) {
+        if (activeCategory !== 'all' && tool.category !== activeCategory) return false;
+        if (!keyword) return true;
+        const haystack = (tool.title + ' ' + tool.desc + ' ' + tool.tags.join(' ')).toLowerCase();
+        return haystack.includes(keyword);
+      }
+
+      function renderTools() {
+        const visible = TOOLS.filter(matches);
+        gridEl.innerHTML = visible
+          .map(
+            (t) => `
+          <a class="tool-card" href="${t.url}" target="_blank" rel="noopener">
+            <div class="icon c-${t.color}">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${ICONS[t.icon]}</svg>
+            </div>
+            <h3>${t.title}</h3>
+            <p>${t.desc}</p>
+            <div class="meta">
+              <span class="badge">운영 중</span>
+              <span class="cat-label">${CATEGORY_LABEL[t.category]}</span>
+            </div>
+          </a>`
+          )
+          .join('');
+        emptyEl.style.display = visible.length ? 'none' : 'block';
+      }
+
+      searchEl.addEventListener('input', () => {
+        keyword = searchEl.value.trim().toLowerCase();
+        renderTools();
+      });
+
+      // ── 화면 모드 전환 ───────────────────────
+      document.getElementById('themeToggle').addEventListener('click', () => {
+        const isDark = document.documentElement.classList.toggle('dark');
+        try {
+          localStorage.setItem('bennett_theme_v1', isDark ? 'dark' : 'light');
+        } catch (e) {}
+      });
+
+      renderChips();
+      renderTools();
+    </script>
   </body>
 </html>
-
